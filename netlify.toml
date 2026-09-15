@@ -1,0 +1,26 @@
+[build]
+  command = "node build.js"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Security headers — no framing, no unnecessary data leakage.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache the HTML briefly so legal-status edits go live fast; fonts long-lived.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
