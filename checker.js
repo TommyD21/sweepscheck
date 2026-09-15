@@ -93,7 +93,11 @@ function hashContent(str) {
 
 function daysSince(dateStr) {
   if (!dateStr) return Infinity;
-  const ms = Date.now() - new Date(dateStr).getTime();
+  // Parse "YYYY-MM-DD" as local calendar date, not UTC, to avoid an
+  // off-by-one day when this runs somewhere other than UTC.
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const parsed = new Date(y, m - 1, d);
+  const ms = Date.now() - parsed.getTime();
   return Math.floor(ms / (1000 * 60 * 60 * 24));
 }
 
