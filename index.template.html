@@ -119,6 +119,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 /* ── PLATFORM CARDS */
 .platform-list{display:flex;flex-direction:column;gap:10px}
 .platform-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+.platform-card.closing-card{border-color:var(--red-border);background:linear-gradient(180deg,rgba(248,113,113,.04),var(--bg2) 40px)}
 .platform-card:hover{border-color:var(--border2)}
 .platform-card.restricted-card{opacity:.5}
 .platform-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .15s}
@@ -537,20 +538,25 @@ function renderState(code) {
       available.forEach(p => {
         const gcOnlyState = p.gcOnly && p.gcOnly.includes(code);
         const staleP = stalenessLabel(p.lastVerified);
+        const isDiscontinued = p.mailSC && p.mailSC.includes('Discontinued');
+        const isClosing = p.closing === true;
+        const isClosed  = p.closed === true;
         let entryBadge = '';
-        if (p.onlineEntry)                         entryBadge = `<span class="pbadge online" aria-label="Online entry available">⌨ Online entry</span>`;
-        else if (p.mailIn)                         entryBadge = `<span class="pbadge mail" aria-label="Mail-in entry available">✉ Mail-in</span>`;
-        else if (p.mailSC && p.mailSC.includes('Discontinued')) entryBadge = `<span class="pbadge noentry" aria-label="Entry program discontinued">✕ No free entry</span>`;
+        if (isClosed)                                entryBadge = `<span class="pbadge blocked" aria-label="Platform permanently closed">✕ Closed</span>`;
+        else if (isClosing)                          entryBadge = `<span class="pbadge noentry" aria-label="Platform closing permanently">⚠ Closing ${p.closingDate ? formatDate(p.closingDate) : ''}</span>`;
+        else if (p.onlineEntry)                      entryBadge = `<span class="pbadge online" aria-label="Online entry available">⌨ Online entry</span>`;
+        else if (p.mailIn)                           entryBadge = `<span class="pbadge mail" aria-label="Mail-in entry available">✉ Mail-in</span>`;
+        else if (isDiscontinued)                     entryBadge = `<span class="pbadge noentry" aria-label="Entry program discontinued">✕ No free entry</span>`;
 
-        html += `<div class="platform-card ${gcOnlyState ? 'gconly' : ''}" role="listitem">
-          <div class="platform-header" onclick="toggleBody('${escHtml(p.id)}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleBody('${escHtml(p.id)}')" role="button" aria-expanded="false" aria-controls="body-${escHtml(p.id)}" aria-label="${escHtml(p.name)} — ${gcOnlyState ? 'GC only' : 'Available'} in ${escHtml(stateName)}">
+        html += `<div class="platform-card ${gcOnlyState ? 'gconly' : ''} ${(isClosing || isClosed) ? 'closing-card' : ''}" role="listitem">
+          <div class="platform-header" onclick="toggleBody('${escHtml(p.id)}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleBody('${escHtml(p.id)}')" role="button" aria-expanded="false" aria-controls="body-${escHtml(p.id)}" aria-label="${escHtml(p.name)} — ${isClosed ? 'Permanently closed' : isClosing ? 'Closing permanently' : gcOnlyState ? 'GC only' : 'Available'} in ${escHtml(stateName)}">
             <div class="plat-avatar" aria-hidden="true">${escHtml(p.name.slice(0,2))}</div>
             <div class="plat-info">
               <span class="plat-name">${escHtml(p.name)}</span>
               <span class="plat-op">${escHtml(p.op)}</span>
             </div>
             <div class="plat-badges">
-              ${gcOnlyState ? `<span class="pbadge gconly">GC only</span>` : `<span class="pbadge avail">Available</span>`}
+              ${isClosed ? `<span class="pbadge blocked">Closed</span>` : isClosing ? `<span class="pbadge blocked">Closing</span>` : gcOnlyState ? `<span class="pbadge gconly">GC only</span>` : `<span class="pbadge avail">Available</span>`}
               ${entryBadge}
               <span class="pbadge conf" aria-label="Confidence ${p.conf} out of 10">${p.conf}/10</span>
             </div>
@@ -558,6 +564,7 @@ function renderState(code) {
           </div>
           <div class="platform-body" id="body-${escHtml(p.id)}">
             <div class="body-inner">
+              ${isClosed ? `<div class="risk-box" style="background:var(--red-bg);border-color:var(--red-border);color:var(--red);margin-bottom:12px"><strong>✕ This platform is permanently closed${p.closingDate ? ` (as of ${formatDate(p.closingDate)})` : ''}.</strong> It no longer accepts sign-ups, logins, or redemptions. See the notice below for details.</div>` : isClosing ? `<div class="risk-box" style="background:var(--red-bg);border-color:var(--red-border);color:var(--red);margin-bottom:12px"><strong>⚠ This platform is permanently closing${p.closingDate ? ` on ${formatDate(p.closingDate)}` : ''}.</strong> Do not create a new account or purchase coins here. See the closure timeline below.</div>` : ''}
               <div class="detail-grid">
                 <div>
                   <div class="d-label">Website</div>
@@ -573,11 +580,11 @@ function renderState(code) {
                 </div>
                 <div>
                   <div class="d-label">Status in ${escHtml(stateName)}</div>
-                  <div class="d-val">${gcOnlyState ? 'GC-only (no SC prizes)' : isGray ? 'Available (gray zone — verify)' : 'Available'}</div>
+                  <div class="d-val">${isClosed ? 'Permanently closed — not available anywhere' : isClosing ? 'Closing permanently — see notice below' : gcOnlyState ? 'GC-only (no SC prizes)' : isGray ? 'Available (gray zone — verify)' : 'Available'}</div>
                 </div>
                 <div>
                   <div class="d-label">Free entry method</div>
-                  <div class="d-val">${p.onlineEntry ? `Online submission — ${escHtml(p.mailSC)}` : p.mailIn ? `Mail-in — ${escHtml(p.mailSC)}` : p.mailSC.includes('Discontinued') ? '⚠ Discontinued May 4 2026' : 'Verify at operator site'}</div>
+                  <div class="d-val">${isClosed ? 'N/A — platform closed' : isClosing ? 'N/A — platform closing' : p.onlineEntry ? `Online submission — ${escHtml(p.mailSC)}` : p.mailIn ? `Mail-in — ${escHtml(p.mailSC)}` : isDiscontinued ? `⚠ ${escHtml(p.mailSC)}` : 'Verify at operator site'}</div>
                 </div>
                 <div>
                   <div class="d-label">Rules version</div>
@@ -587,11 +594,11 @@ function renderState(code) {
 
               ${p.loginGated ? `<div class="login-box">⚠ Official rules and/or ToS require login to view. The links below will redirect to a sign-in page first.</div>` : ''}
 
-              ${(p.mailIn || p.onlineEntry || (p.mailSC && p.mailSC.includes('Discontinued'))) ? `
-              <div class="d-label" style="margin-bottom:6px">${p.onlineEntry ? 'Online entry instructions' : (p.mailSC && p.mailSC.includes('Discontinued')) ? 'Entry program status' : 'Mail-in instructions'}</div>
-              <div class="entry-box ${p.onlineEntry ? 'online' : (p.mailSC && p.mailSC.includes('Discontinued')) ? 'discontinued' : 'mail'}">
-                <div class="entry-head ${p.onlineEntry ? 'online' : (p.mailSC && p.mailSC.includes('Discontinued')) ? 'discontinued' : 'mail'}">
-                  ${p.onlineEntry ? '⌨ How to get free Sweeps Coins online' : (p.mailSC && p.mailSC.includes('Discontinued')) ? '✕ Program discontinued' : '✉ How to get free Sweeps Coins by mail'}
+              ${(p.mailIn || p.onlineEntry || isDiscontinued || isClosing || isClosed) ? `
+              <div class="d-label" style="margin-bottom:6px">${isClosed ? 'Closure notice' : isClosing ? 'Closure notice' : p.onlineEntry ? 'Online entry instructions' : isDiscontinued ? 'Entry program status' : 'Mail-in instructions'}</div>
+              <div class="entry-box ${(isClosing || isClosed) ? 'discontinued' : p.onlineEntry ? 'online' : isDiscontinued ? 'discontinued' : 'mail'}">
+                <div class="entry-head ${(isClosing || isClosed) ? 'discontinued' : p.onlineEntry ? 'online' : isDiscontinued ? 'discontinued' : 'mail'}">
+                  ${isClosed ? '✕ Permanently closed' : isClosing ? '⚠ Permanent closure in progress' : p.onlineEntry ? '⌨ How to get free Sweeps Coins online' : isDiscontinued ? '✕ Program discontinued' : '✉ How to get free Sweeps Coins by mail'}
                 </div>
                 <div class="entry-body">${escHtml(p.mailDetail)}</div>
               </div>` : ''}
