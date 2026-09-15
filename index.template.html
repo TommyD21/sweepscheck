@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="description" content="State-by-state legal eligibility checker for sweepstakes casinos. Verified legal status, mail-in instructions, and free coin methods for all 50 U.S. states. Audited August 2026.">
+<meta name="theme-color" content="#1c1c21">
+<meta property="og:title" content="SweepsCheck — Sweepstakes Casino Legal Lookup">
+<meta property="og:description" content="Find out if sweepstakes casinos are legal in your state. Audited August 8, 2026. Mail-in entry guides, platform availability, and official rules links.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://sweepscheck.app/og-image.png">
+<link rel="canonical" href="https://sweepscheck.app/">
+<title>SweepsCheck — Sweepstakes Casino Legal Lookup by State (August 2026)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1c1c21;--bg2:#242429;--bg3:#2a2a30;--bg4:#313138;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
+  --text:#f0eff6;--text2:#9998ac;--text3:#5f5e72;
+  --green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.25);
+  --red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.25);
+  --amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.25);
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.25);
+  --accent:#a78bfa;--accent-bg:rgba(167,139,250,.12);
+  --r:12px;--rs:8px;--rx:6px;
+  --focus-ring:0 0 0 3px rgba(167,139,250,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── SKIP LINK (a11y) */
+.skip-link{position:absolute;top:-100%;left:8px;background:var(--accent);color:#fff;padding:8px 16px;border-radius:var(--rx);font-weight:500;z-index:9999;text-decoration:none}
+.skip-link:focus{top:8px}
+
+/* ── HEADER */
+.header{position:sticky;top:0;z-index:100;background:rgba(28,28,33,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 16px}
+.header-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px;height:56px}
+.logo{font-family:'Instrument Serif',serif;font-size:18px;color:var(--text);letter-spacing:-.02em;flex:1;text-decoration:none}
+.logo span{color:var(--accent)}
+.audit-badge{font-size:10px;font-weight:500;color:var(--text3);background:var(--bg3);border:1px solid var(--border);padding:3px 8px;border-radius:20px;letter-spacing:.04em;font-family:'DM Mono',monospace;white-space:nowrap}
+
+/* ── MAIN */
+.main{max-width:720px;margin:0 auto;padding:20px 16px 80px}
+
+/* ── HERO */
+.hero{text-align:center;padding:28px 0 20px;animation:fadeUp .5s ease both}
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:10px}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(24px,5vw,38px);font-weight:400;line-height:1.15;letter-spacing:-.03em;margin-bottom:10px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:14px;color:var(--text2);max-width:480px;margin:0 auto;line-height:1.6}
+
+/* ── DISCLAIMER */
+.disclaimer{background:rgba(251,191,36,.07);border:1px solid var(--amber-border);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.5;animation:fadeUp .5s .1s ease both}
+.disclaimer strong{color:var(--amber);font-weight:500}
+
+/* ── SEARCH */
+.search-wrap{position:relative;margin-bottom:20px;animation:fadeUp .5s .15s ease both;z-index:100}
+.search-icon{position:absolute;left:14px;top:17px;color:var(--text3);pointer-events:none}
+#stateText{width:100%;height:52px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;padding:0 44px 0 42px;outline:none;transition:border-color .2s,background .2s;caret-color:var(--accent)}
+#stateText::placeholder{color:var(--text3)}
+#stateText:focus{border-color:var(--accent);background:var(--bg3);box-shadow:var(--focus-ring)}
+.clear-btn{position:absolute;right:12px;top:14px;background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;display:none;border-radius:4px;line-height:1}
+.clear-btn:hover{color:var(--text2)}
+.clear-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.suggestions{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;z-index:9999;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;max-height:280px;overflow-y:auto}
+.suggestions.visible{display:block}
+.suggestion-item{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;transition:background .1s;border-bottom:1px solid var(--border)}
+.suggestion-item:last-child{border-bottom:none}
+.suggestion-item:hover,.suggestion-item.highlighted{background:var(--bg3)}
+.sug-code{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);min-width:28px}
+.sug-name{font-size:14px;color:var(--text);flex:1}
+.sug-status{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;font-family:'DM Mono',monospace}
+.sug-status.legal{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.sug-status.illegal{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.sug-status.gray{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+
+/* ── TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;scrollbar-width:none;animation:fadeUp .5s .2s ease both}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 16px;font-size:13px;color:var(--text3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;margin-bottom:-1px;user-select:none;-webkit-user-select:none}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--text);border-bottom-color:var(--accent);font-weight:500}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:4px 4px 0 0}
+
+/* ── SUMMARY BAR */
+.summary-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'DM Mono',monospace;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:600}
+.stat-val.green{color:var(--green)}.stat-val.red{color:var(--red)}.stat-val.amber{color:var(--amber)}
+
+/* ── STATE STATUS CARD */
+.state-card{border-radius:var(--r);padding:16px;margin-bottom:18px;display:flex;align-items:flex-start;gap:14px}
+.state-card.legal{background:var(--green-bg);border:1px solid var(--green-border)}
+.state-card.illegal{background:var(--red-bg);border:1px solid var(--red-border)}
+.state-card.gray{background:var(--amber-bg);border:1px solid var(--amber-border)}
+.state-icon{font-size:26px;line-height:1;flex-shrink:0;margin-top:2px}
+.state-text h2{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
+.state-text p{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:5px}
+.state-cite{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)}
+.risk-pill{display:inline-block;font-size:11px;padding:4px 10px;border-radius:20px;margin-top:6px;font-weight:500}
+.risk-pill.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.risk-pill.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.risk-pill.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.state-note{margin-top:8px;font-size:12px;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--rx);padding:6px 10px}
+
+/* ── STALENESS BADGE */
+.staleness{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+.staleness.current{background:var(--green-bg);color:var(--green)}
+.staleness.aging{background:var(--amber-bg);color:var(--amber)}
+.staleness.stale{background:var(--red-bg);color:var(--red)}
+
+/* ── SECTION HEAD */
+.section-head{font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:10px}
+
+/* ── PLATFORM CARDS */
+.platform-list{display:flex;flex-direction:column;gap:10px}
+.platform-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+.platform-card.closing-card{border-color:var(--red-border);background:linear-gradient(180deg,rgba(248,113,113,.04),var(--bg2) 40px)}
+.platform-card:hover{border-color:var(--border2)}
+.platform-card.restricted-card{opacity:.5}
+.platform-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .15s}
+.platform-header:hover,.platform-header:focus-visible{background:var(--bg3)}
+.platform-header:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.plat-avatar{width:38px;height:38px;border-radius:10px;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:15px;color:var(--text2);flex-shrink:0}
+.plat-info{flex:1;min-width:0}
+.plat-name{font-size:14px;font-weight:500;color:var(--text);display:block}
+.plat-op{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.plat-badges{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pbadge{font-size:10px;font-weight:500;padding:3px 7px;border-radius:5px;white-space:nowrap;font-family:'DM Mono',monospace}
+.pbadge.avail{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.pbadge.blocked{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.pbadge.gconly{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.pbadge.mail{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.pbadge.online{background:var(--accent-bg);color:var(--accent);border:1px solid rgba(167,139,250,.25)}
+.pbadge.noentry{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.pbadge.conf{background:var(--bg4);color:var(--text2);border:1px solid var(--border)}
+.chev{font-size:16px;color:var(--text3);transition:transform .2s;flex-shrink:0;margin-left:2px}
+.chev.open{transform:rotate(180deg)}
+
+/* ── PLATFORM BODY */
+.platform-body{display:none;border-top:1px solid var(--border)}
+.platform-body.open{display:block}
+.body-inner{padding:16px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:420px){.detail-grid{grid-template-columns:1fr}}
+.d-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'DM Mono',monospace;margin-bottom:3px}
+.d-val{font-size:13px;color:var(--text2);line-height:1.4}
+.d-val a{color:var(--blue);text-decoration:none}
+.d-val a:hover{text-decoration:underline}
+.d-val a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.entry-box{border-radius:var(--rs);padding:12px 14px;margin-bottom:12px}
+.entry-box.online{background:var(--accent-bg);border:1px solid rgba(167,139,250,.25)}
+.entry-box.mail{background:var(--blue-bg);border:1px solid var(--blue-border)}
+.entry-box.discontinued{background:var(--red-bg);border:1px solid var(--red-border)}
+.entry-head{font-size:12px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.entry-head.online{color:var(--accent)}
+.entry-head.mail{color:var(--blue)}
+.entry-head.discontinued{color:var(--red)}
+.entry-body{font-size:12px;color:var(--text2);line-height:1.6}
+.free-methods{background:var(--bg3);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px}
+.method-item{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.method-item:last-child{border-bottom:none}
+.method-dot{color:var(--accent);flex-shrink:0;margin-top:1px}
+.notes-box{font-size:12px;color:var(--text3);line-height:1.55;margin-bottom:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--rs)}
+.risk-box{font-size:12px;color:var(--amber);line-height:1.5;padding:8px 12px;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--rx);margin-bottom:10px}
+.login-box{font-size:12px;color:var(--blue);padding:6px 10px;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--rx);margin-bottom:10px}
+.links-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.link-btn{font-size:11px;padding:6px 12px;border-radius:var(--rx);border:1px solid var(--border2);color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:5px;background:var(--bg4);transition:border-color .15s,color .15s}
+.link-btn:hover{border-color:var(--accent);color:var(--accent)}
+.link-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.source-list{margin-top:8px;margin-bottom:10px}
+.source-item{font-size:11px;color:var(--text3);margin-bottom:3px}
+.source-item a{color:var(--text3);text-decoration:underline}
+.source-type{font-family:'DM Mono',monospace;font-size:9px;background:var(--bg4);padding:1px 4px;border-radius:3px;margin-right:4px}
+.conf-row{display:flex;align-items:center;gap:10px;padding-top:10px;border-top:1px solid var(--border)}
+.conf-label{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;min-width:90px}
+.conf-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.conf-fill{height:100%;border-radius:3px}
+.conf-num{font-size:12px;color:var(--text2);font-family:'DM Mono',monospace;min-width:36px;text-align:right}
+.verified-line{font-size:10px;color:var(--text3);margin-top:8px;font-family:'DM Mono',monospace}
+
+/* ── EMPTY / PLACEHOLDER */
+.empty{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-icon{font-size:36px;margin-bottom:12px;display:block;opacity:.5}
+.empty h3{font-size:15px;color:var(--text2);margin-bottom:6px}
+.empty p{font-size:13px;line-height:1.5}
+.placeholder{text-align:center;padding:48px 20px;animation:fadeUp .5s .25s ease both}
+.ph-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:360px;margin:0 auto 20px}
+.ph-dot{height:8px;border-radius:4px;background:var(--bg3)}
+.ph-dot:nth-child(1){opacity:.3}.ph-dot:nth-child(2){opacity:.6}.ph-dot:nth-child(3){opacity:.9}
+.placeholder p{font-size:14px;color:var(--text3)}
+
+/* ── INFO CARDS (about/legal tab) */
+.info-section{animation:fadeUp .3s ease both}
+.info-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+.info-card h3{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.info-card p{font-size:13px;color:var(--text2);line-height:1.7}
+.info-card a{color:var(--blue)}
+
+/* ── FOOTER */
+.footer{text-align:center;padding:20px 16px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);max-width:720px;margin:0 auto;line-height:1.7}
+.footer a{color:var(--text3);text-decoration:underline}
+
+/* ── ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE */
+@media(max-width:380px){
+  .summary-bar{grid-template-columns:repeat(3,1fr);gap:6px}
+  .stat-val{font-size:18px}
+  .plat-badges{display:none}
+}
+@media(min-width:600px){
+  .hero h1{font-size:36px}
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="SweepsCheck home">Sweeps<span>Check</span></a>
+    <div class="audit-badge" aria-label="Data audited August 8, 2026">AUDITED AUG 8 2026</div>
+  </div>
+</header>
+
+<main class="main" id="main">
+
+  <div class="hero" role="banner">
+    <div class="hero-eyebrow" aria-hidden="true">Legal eligibility lookup</div>
+    <h1>Are sweepstakes casinos<br><em>legal in your state?</em></h1>
+    <p>Evidence-based tracker for all 50 U.S. states. Mail-in entry guides, free coin methods, and verified legal status — sourced from official statutes and operator Terms of Service.</p>
+  </div>
+
+  <div class="disclaimer" role="note">
+    <strong>⚠ Not legal advice.</strong> Data sourced from official state statutes, regulatory actions, and operator Terms of Service. Audited <span id="auditDateDisplay"></span>. The sweepstakes casino legal landscape changes rapidly — always verify with the operator's official rules before playing.
+  </div>
+
+  <div class="search-wrap" id="searchWrap">
+    <span class="search-icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </span>
+    <input type="text" id="stateText"
+      placeholder="Type your state name or abbreviation (e.g. TX or Texas)…"
+      autocomplete="off" autocorrect="off" spellcheck="false"
+      aria-label="Enter your U.S. state"
+      aria-autocomplete="list"
+      aria-controls="suggestions"
+      aria-haspopup="listbox"
+      role="combobox"
+      aria-expanded="false">
+    <button class="clear-btn" id="clearBtn" onclick="clearSearch()" aria-label="Clear state selection" tabindex="0">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="suggestions" id="suggestions" role="listbox" aria-label="State suggestions"></div>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="App sections">
+    <div class="tab active" id="tab-btn-lookup" onclick="switchTab('lookup',this)" role="tab" aria-selected="true" aria-controls="tab-lookup" tabindex="0">State lookup</div>
+    <div class="tab" id="tab-btn-about" onclick="switchTab('about',this)" role="tab" aria-selected="false" aria-controls="tab-about" tabindex="-1">About &amp; legal</div>
+  </nav>
+
+  <div id="tab-lookup" role="tabpanel" aria-labelledby="tab-btn-lookup">
+    <div id="results">
+      <div class="placeholder">
+        <div class="ph-grid" aria-hidden="true"><div class="ph-dot"></div><div class="ph-dot"></div><div class="ph-dot"></div></div>
+        <p>Select a state above to see which sweepstakes casino platforms are legally available and their entry options.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-about" style="display:none" role="tabpanel" aria-labelledby="tab-btn-about" class="info-section">
+    <div class="info-card">
+      <h3><span aria-hidden="true">⚖️</span> What is SweepsCheck?</h3>
+      <p>SweepsCheck is a reference directory — not a gambling service, casino, or legal advisor. It does not operate sweepstakes, accept entries, or award prizes. Its sole purpose is to help users understand the legal landscape for sweepstakes casinos in their state, using evidence sourced from official statutes, regulatory actions, and operator Terms of Service.</p>
+    </div>
+    <div class="info-card">
+      <h3><span aria-hidden="true">📋</span> Data sources and methodology</h3>
+      <p>Every legal claim is traced to a primary source in this priority order: (1) Official state statutes and legislative records, (2) State regulatory agencies and AG offices, (3) Official operator Terms of Service and Sweepstakes Rules, (4) Official operator support pages, (5) Reputable secondary sources only when primary sources are unavailable. Secondary sources are clearly labeled. Uncertain information is flagged as uncertain rather than presented as fact. Source attribution is visible in every expanded platform card.</p>
+    </div>
+    <div class="info-card">
+      <h3><span aria-hidden="true">🔄</span> How data is kept current</h3>
+      <p>A biweekly automated checker runs every 14 days. It monitors key authoritative sources for content changes and staleness. Records older than 30 days are flagged as aging; over 45 days as stale. Any detected legal status changes are <strong>flagged for human review</strong> and never automatically applied. Legal data is only updated after manual verification against primary sources.</p>
+    </div>
+    <div class="info-card">
+      <h3><span aria-hidden="true">🔒</span> Privacy</h3>
+      <p>State selections are not stored. All lookups are stateless. This tool does not collect personal data, set cookies for tracking, or share information with advertising partners. It loads fonts from Google Fonts — the only external resource.</p>
+    </div>
+    <div class="info-card">
+      <h3><span aria-hidden="true">⚠️</span> Limitations and risks</h3>
+      <p>The sweepstakes casino legal landscape is changing rapidly. At least 14 states have enacted bans as of August 2026. New legislation can take effect with little warning. This tool reflects known law as of its last audit date. Always verify the operator's current Terms of Service and your state's law before registering or depositing. This is not a substitute for legal counsel.</p>
+    </div>
+    <div class="info-card">
+      <h3><span aria-hidden="true">📬</span> Corrections</h3>
+      <p>If you identify an error, please submit a correction via <a href="mailto:corrections@sweepscheck.app">corrections@sweepscheck.app</a> with the source URL supporting the correct information. We prioritize official primary sources.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <p>SweepsCheck · Evidence-based legal reference · Not legal advice · Audited <span class="footer-date"></span><br>
+  Sources: official state statutes, operator Terms of Service, regulatory guidance<br>
+  <a href="mailto:corrections@sweepscheck.app">Submit a correction</a></p>
+</footer>
+
+<script>
+// ── INLINE DATA (from data.js) ─────────────────────────────────────────────
+{{DATA_JS}}
+// ── UTILITY ────────────────────────────────────────────────────────────────
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function confColor(c) {
+  if (c >= 8) return 'var(--green)';
+  if (c >= 6) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+function stalenessLabel(lastVerified) {
+  if (!lastVerified) return null;
+  const days = Math.floor((Date.now() - new Date(lastVerified)) / 86400000);
+  if (days < 30) return { cls:'current', text:'Current' };
+  if (days < 45) return { cls:'aging',   text:`${days}d ago` };
+  return             { cls:'stale',   text:`Stale (${days}d)` };
+}
+
+function formatDate(iso) {
+  if (!iso) return 'Unknown';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+}
+
+// ── POPULATE DATES ─────────────────────────────────────────────────────────
+
+document.querySelectorAll('#auditDateDisplay,.footer-date').forEach(el => {
+  el.textContent = formatDate(SITE_META.auditDate);
+});
+
+// ── STATE SEARCH / AUTOCOMPLETE ────────────────────────────────────────────
+
+const stateInput  = document.getElementById('stateText');
+const suggestions = document.getElementById('suggestions');
+const clearBtn    = document.getElementById('clearBtn');
+let selectedCode  = '';
+let highlightIdx  = -1;
+let filteredStates = [];
+
+function getStateStatus(code) {
+  const s = STATE_DATA[code];
+  return s ? s.status : 'legal';
+}
+function getStateStatusLabel(code) {
+  const s = STATE_DATA[code];
+  if (!s) return 'Legal';
+  if (s.status === 'illegal') return 'Banned';
+  if (s.status === 'gray')    return 'Gray zone';
+  return 'Legal';
+}
+
+function filterStates(q) {
+  q = q.trim().toLowerCase();
+  if (!q) return [];
+  const starts   = STATES_LIST.filter(([code, name]) => name.toLowerCase().startsWith(q) || code.toLowerCase().startsWith(q));
+  const includes = STATES_LIST.filter(([code, name]) => !name.toLowerCase().startsWith(q) && !code.toLowerCase().startsWith(q) && name.toLowerCase().includes(q));
+  return [...starts, ...includes].slice(0, 9);
+}
+
+function showSuggestions(list) {
+  highlightIdx  = -1;
+  filteredStates = list;
+  if (!list.length) { suggestions.style.display = 'none'; stateInput.setAttribute('aria-expanded','false'); return; }
+  suggestions.style.display = 'block';
+  stateInput.setAttribute('aria-expanded','true');
+  suggestions.innerHTML = list.map(([code, name]) => {
+    const st  = getStateStatus(code);
+    const lbl = getStateStatusLabel(code);
+    return `<div class="suggestion-item" role="option" data-code="${code}" onclick="selectState('${code}','${escHtml(name)}')" aria-label="${name} — ${lbl}">
+      <span class="sug-code">${code}</span>
+      <span class="sug-name">${name}</span>
+      <span class="sug-status ${st}">${lbl}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectState(code, name) {
+  selectedCode = code;
+  stateInput.value = name;
+  suggestions.style.display = 'none';
+  stateInput.setAttribute('aria-expanded','false');
+  clearBtn.style.display = 'block';
+  renderState(code);
+}
+
+function clearSearch() {
+  stateInput.value = '';
+  selectedCode = '';
+  filteredStates = [];
+  suggestions.style.display = 'none';
+  clearBtn.style.display = 'none';
+  stateInput.setAttribute('aria-expanded','false');
+  document.getElementById('results').innerHTML = `<div class="placeholder"><div class="ph-grid" aria-hidden="true"><div class="ph-dot"></div><div class="ph-dot"></div><div class="ph-dot"></div></div><p>Select a state above to see which sweepstakes casino platforms are legally available and their entry options.</p></div>`;
+  stateInput.focus();
+}
+
+stateInput.addEventListener('input', () => {
+  const q = stateInput.value;
+  clearBtn.style.display = q ? 'block' : 'none';
+  selectedCode = '';
+  showSuggestions(filterStates(q));
+});
+
+stateInput.addEventListener('keydown', e => {
+  if (!filteredStates.length) return;
+  const items = suggestions.querySelectorAll('.suggestion-item');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+    items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    highlightIdx = Math.max(highlightIdx - 1, 0);
+    items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (highlightIdx >= 0 && filteredStates[highlightIdx]) {
+      const [code, name] = filteredStates[highlightIdx];
+      selectState(code, name);
+    }
+  } else if (e.key === 'Escape') {
+    suggestions.style.display = 'none';
+    stateInput.setAttribute('aria-expanded','false');
+  }
+});
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('searchWrap').contains(e.target)) {
+    suggestions.style.display = 'none';
+    stateInput.setAttribute('aria-expanded','false');
+  }
+});
+
+// ── TAB SWITCHING ──────────────────────────────────────────────────────────
+
+function switchTab(name, el) {
+  ['lookup','about'].forEach(t => {
+    const panel = document.getElementById('tab-' + t);
+    const btn   = document.getElementById('tab-btn-' + t);
+    if (panel) panel.style.display = t === name ? 'block' : 'none';
+    if (btn) {
+      btn.classList.toggle('active', t === name);
+      btn.setAttribute('aria-selected', t === name ? 'true' : 'false');
+      btn.tabIndex = t === name ? 0 : -1;
+    }
+  });
+}
+
+// ── PLATFORM CARD TOGGLE ───────────────────────────────────────────────────
+
+function toggleBody(id) {
+  const body   = document.getElementById('body-' + id);
+  const chev   = document.getElementById('chev-' + id);
+  const header = body.previousElementSibling;
+  const isOpen = body.classList.toggle('open');
+  chev.classList.toggle('open', isOpen);
+  header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+// ── RENDER STATE ───────────────────────────────────────────────────────────
+
+function renderState(code) {
+  if (!code) code = selectedCode;
+  if (!code) return;
+  const res = document.getElementById('results');
+
+  const st       = STATE_DATA[code] || DEFAULT_STATE;
+  const stateName = (STATES_LIST.find(([c]) => c === code) || [code, code])[1];
+  const isIllegal = st.status === 'illegal';
+  const isGray    = st.status === 'gray';
+
+  const available = PLATFORMS.filter(p => !p.restricted.includes(code));
+  const restricted = PLATFORMS.filter(p => p.restricted.includes(code));
+  const gcOnlyHere = PLATFORMS.filter(p => p.gcOnly && p.gcOnly.includes(code));
+  const mailInCount = available.filter(p => p.mailIn || p.onlineEntry).length;
+
+  const stale = stalenessLabel(st.lastVerified);
+
+  let html = `
+  <div class="summary-bar" role="region" aria-label="Summary for ${escHtml(stateName)}">
+    <div class="stat-card">
+      <div class="stat-label">Status</div>
+      <div class="stat-val ${isIllegal ? 'red' : isGray ? 'amber' : 'green'}" aria-label="Legal status: ${isIllegal ? 'Banned' : isGray ? 'Gray zone' : 'Legal'}">
+        ${isIllegal ? 'Banned' : isGray ? 'Gray' : 'Legal'}
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Platforms</div>
+      <div class="stat-val ${isIllegal ? 'red' : available.length > 0 ? 'green' : 'amber'}" aria-label="${isIllegal ? 0 : available.length} platforms available">${isIllegal ? 0 : available.length}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Free entry</div>
+      <div class="stat-val" aria-label="${isIllegal ? 0 : mailInCount} platforms with free entry methods">${isIllegal ? 0 : mailInCount}</div>
+    </div>
+  </div>
+
+  <div class="state-card ${isIllegal ? 'illegal' : isGray ? 'gray' : 'legal'}" role="region" aria-label="${escHtml(stateName)} legal status">
+    <div class="state-icon" aria-hidden="true">${st.icon}</div>
+    <div class="state-text">
+      <h2>${escHtml(stateName)} — ${escHtml(st.label)}${stale ? `<span class="staleness ${stale.cls}" aria-label="Data ${stale.text}">${stale.text}</span>` : ''}</h2>
+      <p>${escHtml(st.desc)}</p>
+      <div class="state-cite">${escHtml(st.law)}</div>
+      ${st.riskLabel ? `<div class="risk-pill ${st.risk}">${escHtml(st.riskLabel)}</div>` : ''}
+      ${st.note ? `<div class="state-note">${escHtml(st.note)}</div>` : ''}
+    </div>
+  </div>`;
+
+  if (isIllegal) {
+    html += `<div class="empty" role="status">
+      <span class="empty-icon" aria-hidden="true">🚫</span>
+      <h3>No sweepstakes casino platforms are legally available in ${escHtml(stateName)}</h3>
+      <p>Playing in a state where sweepstakes casinos are banned violates operator Terms of Service regardless of method. Attempting to play may result in account suspension, balance forfeiture, and permanent banning. Using a VPN to bypass state blocks is detectable and prohibited by all operators.<br><br>Always verify current law with official state sources and operator ToS before attempting to play.</p>
+    </div>`;
+
+  } else {
+    if (gcOnlyHere.length > 0) {
+      html += `<div class="disclaimer" style="border-color:var(--amber-border)"><strong>⚠ Gold Coin only in ${escHtml(stateName)}:</strong> ${gcOnlyHere.map(p => escHtml(p.name)).join(', ')} operate in Gold Coin only mode here — Sweeps Coins are not available and prizes cannot be redeemed.</div>`;
+    }
+
+    if (available.length > 0) {
+      html += `<div class="section-head">Available platforms (${available.length})</div><div class="platform-list" role="list">`;
+      available.forEach(p => {
+        const gcOnlyState = p.gcOnly && p.gcOnly.includes(code);
+        const staleP = stalenessLabel(p.lastVerified);
+        const isDiscontinued = p.mailSC && p.mailSC.includes('Discontinued');
+        const isClosing = p.closing === true;
+        const isClosed  = p.closed === true;
+        let entryBadge = '';
+        if (isClosed)                                entryBadge = `<span class="pbadge blocked" aria-label="Platform permanently closed">✕ Closed</span>`;
+        else if (isClosing)                          entryBadge = `<span class="pbadge noentry" aria-label="Platform closing permanently">⚠ Closing ${p.closingDate ? formatDate(p.closingDate) : ''}</span>`;
+        else if (p.onlineEntry)                      entryBadge = `<span class="pbadge online" aria-label="Online entry available">⌨ Online entry</span>`;
+        else if (p.mailIn)                           entryBadge = `<span class="pbadge mail" aria-label="Mail-in entry available">✉ Mail-in</span>`;
+        else if (isDiscontinued)                     entryBadge = `<span class="pbadge noentry" aria-label="Entry program discontinued">✕ No free entry</span>`;
+
+        html += `<div class="platform-card ${gcOnlyState ? 'gconly' : ''} ${(isClosing || isClosed) ? 'closing-card' : ''}" role="listitem">
+          <div class="platform-header" onclick="toggleBody('${escHtml(p.id)}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleBody('${escHtml(p.id)}')" role="button" aria-expanded="false" aria-controls="body-${escHtml(p.id)}" aria-label="${escHtml(p.name)} — ${isClosed ? 'Permanently closed' : isClosing ? 'Closing permanently' : gcOnlyState ? 'GC only' : 'Available'} in ${escHtml(stateName)}">
+            <div class="plat-avatar" aria-hidden="true">${escHtml(p.name.slice(0,2))}</div>
+            <div class="plat-info">
+              <span class="plat-name">${escHtml(p.name)}</span>
+              <span class="plat-op">${escHtml(p.op)}</span>
+            </div>
+            <div class="plat-badges">
+              ${isClosed ? `<span class="pbadge blocked">Closed</span>` : isClosing ? `<span class="pbadge blocked">Closing</span>` : gcOnlyState ? `<span class="pbadge gconly">GC only</span>` : `<span class="pbadge avail">Available</span>`}
+              ${entryBadge}
+              <span class="pbadge conf" aria-label="Confidence ${p.conf} out of 10">${p.conf}/10</span>
+            </div>
+            <svg class="chev" id="chev-${escHtml(p.id)}" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="platform-body" id="body-${escHtml(p.id)}">
+            <div class="body-inner">
+              ${isClosed ? `<div class="risk-box" style="background:var(--red-bg);border-color:var(--red-border);color:var(--red);margin-bottom:12px"><strong>✕ This platform is permanently closed${p.closingDate ? ` (as of ${formatDate(p.closingDate)})` : ''}.</strong> It no longer accepts sign-ups, logins, or redemptions. See the notice below for details.</div>` : isClosing ? `<div class="risk-box" style="background:var(--red-bg);border-color:var(--red-border);color:var(--red);margin-bottom:12px"><strong>⚠ This platform is permanently closing${p.closingDate ? ` on ${formatDate(p.closingDate)}` : ''}.</strong> Do not create a new account or purchase coins here. See the closure timeline below.</div>` : ''}
+              <div class="detail-grid">
+                <div>
+                  <div class="d-label">Website</div>
+                  <div class="d-val"><a href="https://${escHtml(p.site)}" target="_blank" rel="noopener noreferrer">${escHtml(p.site)} ↗</a></div>
+                </div>
+                <div>
+                  <div class="d-label">Operator</div>
+                  <div class="d-val">${escHtml(p.op)}</div>
+                </div>
+                <div>
+                  <div class="d-label">Age requirement</div>
+                  <div class="d-val">${escHtml(p.age)}</div>
+                </div>
+                <div>
+                  <div class="d-label">Status in ${escHtml(stateName)}</div>
+                  <div class="d-val">${isClosed ? 'Permanently closed — not available anywhere' : isClosing ? 'Closing permanently — see notice below' : gcOnlyState ? 'GC-only (no SC prizes)' : isGray ? 'Available (gray zone — verify)' : 'Available'}</div>
+                </div>
+                <div>
+                  <div class="d-label">Free entry method</div>
+                  <div class="d-val">${isClosed ? 'N/A — platform closed' : isClosing ? 'N/A — platform closing' : p.onlineEntry ? `Online submission — ${escHtml(p.mailSC)}` : p.mailIn ? `Mail-in — ${escHtml(p.mailSC)}` : isDiscontinued ? `⚠ ${escHtml(p.mailSC)}` : 'Verify at operator site'}</div>
+                </div>
+                <div>
+                  <div class="d-label">Rules version</div>
+                  <div class="d-val">${escHtml(p.rulesVersion || 'Verify at operator site')}</div>
+                </div>
+              </div>
+
+              ${p.loginGated ? `<div class="login-box">⚠ Official rules and/or ToS require login to view. The links below will redirect to a sign-in page first.</div>` : ''}
+
+              ${(p.mailIn || p.onlineEntry || isDiscontinued || isClosing || isClosed) ? `
+              <div class="d-label" style="margin-bottom:6px">${isClosed ? 'Closure notice' : isClosing ? 'Closure notice' : p.onlineEntry ? 'Online entry instructions' : isDiscontinued ? 'Entry program status' : 'Mail-in instructions'}</div>
+              <div class="entry-box ${(isClosing || isClosed) ? 'discontinued' : p.onlineEntry ? 'online' : isDiscontinued ? 'discontinued' : 'mail'}">
+                <div class="entry-head ${(isClosing || isClosed) ? 'discontinued' : p.onlineEntry ? 'online' : isDiscontinued ? 'discontinued' : 'mail'}">
+                  ${isClosed ? '✕ Permanently closed' : isClosing ? '⚠ Permanent closure in progress' : p.onlineEntry ? '⌨ How to get free Sweeps Coins online' : isDiscontinued ? '✕ Program discontinued' : '✉ How to get free Sweeps Coins by mail'}
+                </div>
+                <div class="entry-body">${escHtml(p.mailDetail)}</div>
+              </div>` : ''}
+
+              <div class="d-label" style="margin-bottom:6px">Free coin methods</div>
+              <div class="free-methods" aria-label="Free coin methods for ${escHtml(p.name)}">
+                ${p.methods.map(m => `<div class="method-item"><span class="method-dot" aria-hidden="true">◆</span><span>${escHtml(m)}</span></div>`).join('')}
+              </div>
+
+              <div class="d-label" style="margin-bottom:6px">Notes</div>
+              <div class="notes-box">${escHtml(p.notes)}</div>
+
+              ${p.risk ? `<div class="risk-box" role="note"><strong>⚠ Risk note:</strong> ${escHtml(p.risk)}</div>` : ''}
+
+              <div class="links-row">
+                <a href="${escHtml(p.rulesUrl)}" target="_blank" rel="noopener noreferrer" class="link-btn" aria-label="Official sweepstakes rules for ${escHtml(p.name)} (opens in new tab)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Official rules${staleP && staleP.cls !== 'current' ? ` <span class="staleness ${staleP.cls}">${staleP.text}</span>` : ''}
+                </a>
+                <a href="${escHtml(p.tosUrl)}" target="_blank" rel="noopener noreferrer" class="link-btn" aria-label="Terms of Service for ${escHtml(p.name)} (opens in new tab)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                  Terms of service
+                </a>
+              </div>
+
+              ${p.sources && p.sources.length > 0 ? `
+              <div class="d-label" style="margin-bottom:4px">Sources</div>
+              <div class="source-list">
+                ${p.sources.map(s => `<div class="source-item"><span class="source-type">${escHtml(s.type)}</span>${s.url ? `<a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer">${escHtml(s.label)}</a>` : escHtml(s.label)}</div>`).join('')}
+              </div>` : ''}
+
+              <div class="conf-row">
+                <div class="conf-label">Confidence</div>
+                <div class="conf-track" role="progressbar" aria-valuenow="${p.conf}" aria-valuemin="0" aria-valuemax="10" aria-label="Confidence score ${p.conf} out of 10">
+                  <div class="conf-fill" style="width:${Math.round((p.conf/10)*100)}%;background:${confColor(p.conf)}"></div>
+                </div>
+                <div class="conf-num">${p.conf}/10</div>
+              </div>
+              <div class="verified-line">Last verified: ${escHtml(p.lastVerified)} · Audit: Aug 8 2026 · Sources: ${escHtml((p.sources||[]).map(s=>s.type).join(', ')||'See links above')}</div>
+            </div>
+          </div>
+        </div>`;
+      });
+      html += '</div>';
+    }
+
+    if (restricted.length > 0) {
+      html += `<div class="section-head" style="margin-top:20px;margin-bottom:10px">Restricted in ${escHtml(stateName)} (${restricted.length})</div>
+      <div class="platform-list" role="list">`;
+      restricted.forEach(p => {
+        html += `<div class="platform-card restricted-card" role="listitem">
+          <div class="platform-header" style="cursor:default" aria-label="${escHtml(p.name)} — restricted in ${escHtml(stateName)}">
+            <div class="plat-avatar" aria-hidden="true">${escHtml(p.name.slice(0,2))}</div>
+            <div class="plat-info"><span class="plat-name">${escHtml(p.name)}</span><span class="plat-op">${escHtml(p.op)}</span></div>
+            <div class="plat-badges"><span class="pbadge blocked">Restricted</span></div>
+          </div>
+        </div>`;
+      });
+      html += '</div>';
+    }
+  }
+
+  // State sources
+  if (st.sources && st.sources.length > 0) {
+    html += `<div style="font-size:10px;color:var(--text3);margin-top:18px;line-height:1.7;font-family:'DM Mono',monospace;border-top:1px solid var(--border);padding-top:10px">
+      <strong style="color:var(--text3)">State legal status sources:</strong>
+      ${st.sources.filter(s => s.url).map(s => `<a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--text3);text-decoration:underline;display:inline-block;margin-right:10px">${escHtml(s.label)}</a>`).join('')}
+      <br>Data audited Aug 8 2026 · Confidence: ${st.confidence}/10 · Not legal advice
+    </div>`;
+  }
+
+  res.innerHTML = html;
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
