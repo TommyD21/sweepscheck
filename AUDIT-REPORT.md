@@ -140,3 +140,33 @@ For each platform, the following was checked:
 ---
 
 *Audit completed August 8, 2026. Next scheduled automated check: August 22, 2026.*
+
+---
+
+# Addendum — November 11, 2026 update (data v3.1.0)
+
+## Why this update happened
+The site still showed "Sept 15" in November. Root causes, all fixed in this release:
+1. The scheduled workflow used `npm ci` and an npm cache with no `package-lock.json`, so it would fail before the checker ran. Fixed: no install step is needed (zero dependencies); a lockfile is also included.
+2. `.content-hashes.json` was gitignored, so change detection never had a baseline. Fixed: it is now committed.
+3. The commit step was skipped whenever the checker exited "review required" (GitHub reports that as outcome `failure`). Fixed: it now commits unless cancelled or a dry run.
+4. The checker's fallback would have overwritten `auditDate` with the run date, falsely implying verification. Fixed: it edits only `lastChecked` and `nextScheduled`, only inside `SITE_META`, and only if at least one monitored source was reached.
+5. The page showed only `auditDate`. It now shows "VERIFIED <date>" (a person/Claude reviewed the law) separately from "Automated source check" (the bot reached its sources). Hard-coded "Aug 8 2026" strings were removed from the template; a test now prevents their return.
+
+## Legal data changes (sources in `data.js`)
+| State | Change |
+|---|---|
+| OK | SB 1589 took effect Nov 1 2026. Reported exits: ACE (Oct 6), Baba (SC ended Oct 21), Stake.us (Oct 30), Modo.us (SC ended Nov 1). Exit status of every platform was not independently confirmed. |
+| FL | Moved legal → gray. AG Uthmeier sued VGW and Stake on Aug 19 2026 (allegations, unproven). The Sept 15 data had missed this. |
+| AR | New gray entry. AG Griffin sued VGW on Nov 4 2026 in White County Circuit Court. |
+| KY | Corrected. Earlier text said "no AG action"; the KY AG filed suit against VGW on Jun 17 2026 (official complaint linked). |
+| NY | VGW $8M settlement announced Sept 9 2026 noted on the Chumba platform; state status unchanged. |
+
+## What was NOT re-verified
+- Platform restricted-state lists and entry methods were not re-checked this pass. They keep `lastVerified: 2026-09-15` and will display as stale/critical until re-audited. Platform entries for VGW brands and Stake.us gained litigation notes only.
+- States not named above keep their Sept 15 `lastVerified`. The tracker sweep reviewed (Sweepsy, Sept–Nov 2026) reported no other state-law changes; that is a secondary-source sweep, not primary-source re-verification.
+- Whether VGW or other operators have blocked Florida or Arkansas is unknown.
+- Pending, not enacted: Pennsylvania HB 2801, Wyoming interim committee draft, Virginia SB 579 (continued to 2027).
+
+## Next human review
+Florida and Arkansas litigation outcomes; Iowa IRGC enforcement; Florida 2027 session; platform restricted-list refresh.

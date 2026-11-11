@@ -88,7 +88,15 @@ function err(...args) {
 }
 
 function hashContent(str) {
-  return crypto.createHash('sha256').update(str).digest('hex').slice(0, 16);
+  // Hash visible text only, so rotating script nonces, CSS bundles and
+  // whitespace don't register as "content changed" on every run.
+  const visible = String(str)
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return crypto.createHash('sha256').update(visible).digest('hex').slice(0, 16);
 }
 
 function daysSince(dateStr) {
@@ -239,6 +247,7 @@ async function run() {
   console.log(`▶ Fetching ${MONITORED_SOURCES.length} monitored sources…`);
   const prevHashes = loadHashes();
   const newHashes  = { ...prevHashes };
+  let sourcesOk = 0;
 
   for (const source of MONITORED_SOURCES) {
     process.stdout.write(`  ${source.id}… `);
@@ -255,6 +264,7 @@ async function run() {
       continue;
     }
 
+    sourcesOk++;
     const newHash = hashContent(result.text);
     const oldHash = prevHashes[source.id];
     newHashes[source.id] = newHash;
@@ -315,6 +325,8 @@ async function run() {
     stalenessAlerts:    report.stalenessAlerts.length,
     contentChanges:     report.contentChanges.length,
     urlErrors:          report.urlErrors.length,
+    sourcesChecked:     sourcesOk,
+    sourcesTotal:       MONITORED_SOURCES.length,
     banSignals:         report.banSignals.length,
     integrityErrors:    report.integrityFindings.filter(f => f.severity === 'error').length,
     integrityWarnings:  report.integrityFindings.filter(f => f.severity === 'warn').length,
@@ -332,8 +344,13 @@ async function run() {
   if (!DRY_RUN) {
     fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
     fs.writeFileSync(summaryFile, generateMarkdownSummary(report, reviewRequired));
-    // Update the "last checked" in data.js (only the timestamp field, not legal data)
-    updateLastChecked(runTs);
+    // Stamp "last checked" ONLY if at least one source was actually reached.
+    // This never touches auditDate (that means a human verified the law).
+    if (sourcesOk > 0) {
+      updateLastChecked(runTs);
+    } else {
+      console.log('⚠ No monitored source could be reached — lastChecked NOT updated.');
+    }
   }
 
   // ── 6. CONSOLE SUMMARY ──────────────────────────────────────────────────────
@@ -515,20 +532,27 @@ function generateMarkdownSummary(report, reviewItems) {
 // ─── UPDATE LAST CHECKED IN DATA FILE ────────────────────────────────────────
 
 function updateLastChecked(ts) {
-  // Only updates the SITE_META.lastChecked field — does NOT touch legal data
+  // Edits ONLY lastChecked and nextScheduled inside the SITE_META block.
+  // It never touches auditDate (human verification) or any legal data.
   let content = fs.readFileSync(DATA_FILE, 'utf8');
   const dateOnly = ts.split('T')[0];
-  // Replace or insert lastChecked in SITE_META
-  if (content.includes('lastChecked:')) {
-    content = content.replace(/lastChecked:\s*"[^"]*"/, `lastChecked: "${dateOnly}"`);
-  } else {
-    content = content.replace(/auditDate:\s*"[^"]*"/, `auditDate: "${dateOnly}",\n  lastChecked: "${dateOnly}"`);
+  const m = content.match(/const SITE_META = \{[\s\S]*?\n\};/);
+  if (!m) { err('SITE_META block not found — not stamping lastChecked'); return; }
+  let block = m[0];
+  if (!/lastChecked:/.test(block)) {
+    err('SITE_META.lastChecked missing — add it to data.js; not stamping');
+    return;
   }
-  // Also update nextScheduled (14 days from now)
-  const next = new Date(ts);
-  next.setDate(next.getDate() + 14);
-  const nextDate = next.toISOString().split('T')[0];
-  content = content.replace(/nextScheduled:\s*"[^"]*"/, `nextScheduled: "${nextDate}"`);
+  // Workflow cron fires on the 1st and 15th (UTC): compute the next one.
+  const [yy, mm, dd] = dateOnly.split('-').map(Number);
+  const pad = n => String(n).padStart(2, '0');
+  const nextDate = dd < 15
+    ? `${yy}-${pad(mm)}-15`
+    : (mm === 12 ? `${yy + 1}-01-01` : `${yy}-${pad(mm + 1)}-01`);
+  block = block
+    .replace(/lastChecked:\s*"[^"]*"/, `lastChecked:     "${dateOnly}"`)
+    .replace(/nextScheduled:\s*"[^"]*"/, `nextScheduled:   "${nextDate}"`);
+  content = content.replace(m[0], block);
   fs.writeFileSync(DATA_FILE, content);
 }
 

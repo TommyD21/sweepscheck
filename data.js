@@ -3,7 +3,7 @@
  *
  * Single source of truth for all state and platform legal data.
  * Every material claim requires a source entry.
- * Last full audit: August 8, 2026
+ * Last full audit: see SITE_META.auditDate
  *
  * Source quality tiers used in confidence scoring:
  *   "statute"      — signed state law / official legislative record  (weight 10)
@@ -22,11 +22,12 @@
 // ─── SITE METADATA ────────────────────────────────────────────────────────────
 
 const SITE_META = {
-  auditDate:       "2026-09-15",   // Date of this full manual audit
-  previousAudit:   "2026-08-08",   // Prior audit date, kept for reference
-  nextScheduled:   "2026-09-29",   // Next automated check due
-  dataVersion:     "3.0.0",
-  auditCutoff:     "September 15, 2026",
+  auditDate:       "2026-11-11",   // Last HUMAN/Claude verification of legal data (checker never edits this)
+  lastChecked:     "",             // Set ONLY by the automated checker after it reaches its sources; empty = never run
+  previousAudit:   "2026-09-15",   // Prior audit date, kept for reference
+  nextScheduled:   "2026-11-15",   // Next automated check due
+  dataVersion:     "3.1.0",
+  auditCutoff:     "November 11, 2026",
   disclaimer:      "This is a reference directory, not legal advice. Sweepstakes casino law changes rapidly. Always verify current status with the operator's official Terms of Service before playing.",
 };
 
@@ -102,7 +103,7 @@ const STATE_DATA = {
     desc:"New York S5935-A, effective December 5 2025. Passed both chambers following AG Letitia James' March 2025 cease-and-desist letters to 26 operators. All major platforms exited by the effective date.",
     law:"NY S5935-A (effective Dec 5 2025)",
     risk:"red", riskLabel:"Confirmed statutory ban — no legal access",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"statute", label:"NY S5935-A legislative record", url:"https://www.nysenate.gov/legislation/bills/2025/S5935"},
       {type:"secondary", label:"sweepcasinos.com 50-state guide Jul 2026", url:"https://sweepcasinos.com/legal/"},
@@ -154,7 +155,7 @@ const STATE_DATA = {
     desc:"Louisiana HB 53 (Act 48) and HB 883 (Act 182), both signed by Gov. Jeff Landry and effective August 1 2026. HB 53 adds sweepstakes casino operators to the state's racketeering statute. HB 883 defines dual-currency online sweepstakes as illegal 'gambling by computer,' with penalties up to $100,000 and 5 years in prison per violation. Louisiana Gaming Control Board had previously issued 40+ cease-and-desist letters (2025). Louisiana also sued VGW and WOW Vegas for $44M in back taxes (Sept 2025).",
     law:"LA HB 53 (Act 48) + HB 883 (Act 182) — effective Aug 1 2026 — racketeering and felony exposure",
     risk:"red", riskLabel:"Racketeering and felony liability effective Aug 1 2026 — no legal access",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"statute", label:"InfoLawGroup: LA 2026 racketeering statutes", url:"https://www.infolawgroup.com/insights/2026/7/27/sweepstakes-casino-laws-in-2026-new-bans-proposed-legislation-and-regulatory-trends"},
       {type:"secondary", label:"Lines.com: LA statute details Jul 2026", url:"https://www.lines.com/sweepstakes-casinos/states"},
@@ -167,7 +168,7 @@ const STATE_DATA = {
     desc:"New Jersey has two enacted sweepstakes casino bans. The original A5447 (P.L. 2025) was signed Aug 15 2025 by Gov. Murphy with immediate effect. An updated measure (P.L. 2026, c. 128) was signed Aug 3 2026 after clearing the Assembly 69-10 (Jun 30) and Senate 34-5 (Jul 27). Both measures prohibit dual-currency sweepstakes wagering. Enforcement by Division of Gaming Enforcement and Division of Consumer Affairs.",
     law:"NJ A5447 (P.L. 2025, effective Aug 15 2025) + P.L. 2026 c. 128 (signed Aug 3 2026)",
     risk:"red", riskLabel:"Dual statutory bans — DGE and DCA enforcement — no legal access",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"statute", label:"PlayUSA: NJ A5447 2026 enacted", url:"https://www.playusa.com/news/assembly-bill-a5447-enacted-bans-nj-sweepstakes-casinos/"},
       {type:"secondary", label:"Lines.com state guide Jul 2026", url:"https://www.lines.com/sweepstakes-casinos/states"},
@@ -182,7 +183,7 @@ const STATE_DATA = {
     desc:"Michigan's Lawful Internet Gaming Act (LIGA) requires licensure for online casino-style gaming. The Michigan Gaming Control Board (MGCB) issued cease-and-desist letters to major sweepstakes operators beginning 2023–2024 and has enforced a functional ban via the LIGA since then. No dedicated sweepstakes-specific statute, but MGA licensing requirements effectively exclude the dual-currency model.",
     law:"Michigan Lawful Internet Gaming Act (LIGA) — MGCB C&D enforcement 2023–2024",
     risk:"red", riskLabel:"MGCB enforcement functional ban — major operators have exited",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"regulator", label:"Lines.com: MI MGCB enforcement", url:"https://www.lines.com/sweepstakes-casinos/states"},
       {type:"secondary", label:"sweepcasinos.com 50-state guide Jul 2026", url:"https://sweepcasinos.com/legal/"},
@@ -245,18 +246,19 @@ const STATE_DATA = {
   // ── ENACTED BUT NOT YET EFFECTIVE ────────────────────────────────────────
 
   OK: {
-    status:"illegal", label:"Ban enacted (Nov 1 2026)", icon:"⚠️",
-    desc:"Oklahoma SB 1589 was vetoed by Gov. Kevin Stitt on May 7 2026, but the Oklahoma Legislature overrode the veto on May 14 2026 (Senate 34-10, House 68-19). The ban takes effect November 1, 2026. As of August 8 2026, sweepstakes casinos remain legal to play in Oklahoma, but operators are beginning orderly exits ahead of the deadline.",
+    status:"illegal", label:"Banned (effective Nov 1 2026)", icon:"🚫",
+    desc:"Oklahoma SB 1589 became law when the Legislature overrode Gov. Kevin Stitt's veto on May 14 2026, and it took effect November 1, 2026. It prohibits unauthorized online casino games, including dual-currency sweepstakes models, and reaches operators, platform and game providers, payment processors, promoters and affiliates; violations are felonies. Tribal gaming under IGRA is carved out. Operators exited ahead of the deadline: ACE Casino (Oct 6), Baba Casino (SC play ended Oct 21), Stake.us (Oct 30), Modo.us (SC play ended Nov 1). Not every operator's exit was independently confirmed; do not assume any sweepstakes casino is lawful to use in Oklahoma.",
     law:"OK SB 1589 (veto override May 14 2026, effective Nov 1 2026)",
-    risk:"red", riskLabel:"Enacted ban — effective Nov 1 2026 — operators exiting now",
-    lastVerified:"2026-09-15",
+    risk:"red", riskLabel:"Statutory ban now in effect — felony exposure — no legal access",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"statute", label:"InfoLawGroup: OK SB 1589 veto override", url:"https://www.infolawgroup.com/insights/2026/7/27/sweepstakes-casino-laws-in-2026-new-bans-proposed-legislation-and-regulatory-trends"},
-      {type:"secondary", label:"Lines.com state guide Jul 2026", url:"https://www.lines.com/sweepstakes-casinos/states"},
+      {type:"secondary", label:"Bonus.com: OK ban takes effect Nov 1 (Oct 13 2026)", url:"https://www.bonus.com/news/oklahoma-sweepstakes-casino-ban-takes-effect-nov-1-with-players-urged-to-redeem-balances-e/"},
+      {type:"secondary", label:"Sweepsy: Baba, ACE exit Oklahoma (Oct 14 2026)", url:"https://www.sweepsy.com/news/baba-ace-exit-oklahoma-nov-1-sweeps-ban/"},
     ],
     confidence:9.0,
-    note:"Currently playable but not for long. Do not start a new account or make purchases. Check operator ToS before playing."
   },
+
 
   // ── GRAY ZONE / REGULATORY RISK ──────────────────────────────────────────
 
@@ -265,7 +267,7 @@ const STATE_DATA = {
     desc:"Iowa SF 2289, signed May 15 2026 by Gov. Kim Reynolds, effective Jul 1 2026. Does not ban sweepstakes casinos outright, but gives the Iowa Racing and Gaming Commission expanded authority to issue cease-and-desist orders and seek injunctive relief against operators it deems to be offering illegal gambling. Most major brands still serve Iowa as of August 2026 but the commission could act at any time.",
     law:"IA SF 2289 (effective Jul 1 2026) — IRGC enforcement authority; no operators yet targeted",
     risk:"amber", riskLabel:"Regulator has new C&D authority — major brands still operating — verify each platform",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"statute", label:"InfoLawGroup: IA SF 2289 detail", url:"https://www.infolawgroup.com/insights/2026/7/27/sweepstakes-casino-laws-in-2026-new-bans-proposed-legislation-and-regulatory-trends"},
       {type:"secondary", label:"Covers.com: Iowa governor signs SF 2289", url:"https://www.covers.com/industry/iowa-governor-signs-bill-giving-regulators-power-over-sweepstakes-casinos-may-19-2026"},
@@ -278,7 +280,7 @@ const STATE_DATA = {
     desc:"The Pennsylvania Gaming Control Board (PGCB) issued cease-and-desist letters to 18 operators in April 2025; all complied. Major platforms (Stake.us, McLuck, High 5 Casino) now block Pennsylvania. Smaller, lesser-known platforms may still operate. No dedicated sweepstakes ban statute enacted in 2026. PGCB has asked lawmakers for stronger enforcement tools.",
     law:"PGCB C&D letters (Apr 2025) — major brands exited; no statute",
     risk:"amber", riskLabel:"Major brands exited after PGCB C&Ds — smaller platforms vary — verify before signing up",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"regulator", label:"sweepcasinos.com: PA PGCB detail", url:"https://sweepcasinos.com/legal/"},
       {type:"secondary", label:"sweepskings.com state guide", url:"https://sweepskings.com/sweepstakes-casinos/legal/"},
@@ -300,17 +302,19 @@ const STATE_DATA = {
   },
 
   KY: {
-    status:"gray", label:"Gray zone (private litigation)", icon:"⚠️",
-    desc:"Kentucky's KRS 372.040 (private lawsuits provision) has driven 30+ sweepstakes casino brands out of the state via private civil actions. VGW settled a Kentucky lawsuit without admitting wrongdoing. Despite no AG enforcement or statutory ban, most major platforms self-restrict. Some platforms still operate. Technically no explicit ban but effectively restricted.",
-    law:"KRS 372.040 (private lawsuits) — 30+ brands self-restrict; no AG action or statute",
-    risk:"amber", riskLabel:"Private lawsuit risk has driven out most major brands — verify each platform",
-    lastVerified:"2026-09-15",
+    status:"gray", label:"Gray zone (AG lawsuit + private litigation)", icon:"⚠️",
+    desc:"Kentucky has no sweepstakes-specific ban statute, but the state is hostile. KRS 372.040 (private recovery of gambling losses) has driven 30+ brands out via private civil actions. On June 17 2026 Attorney General Russell Coleman filed suit against VGW (Chumba, LuckyLand, Global Poker) alleging illegal gambling; VGW says it rejects the claims and will defend. Most major platforms self-restrict; some still operate. Treat as effectively restricted and verify each platform.",
+    law:"KRS 372.040 (private loss-recovery suits) + KY AG v. VGW complaint filed Jun 17 2026 — no ban statute",
+    risk:"amber", riskLabel:"Active AG lawsuit plus private-suit risk — most major brands self-restrict — verify each platform",
+    lastVerified:"2026-11-11",
     sources:[
-      {type:"secondary", label:"sweepcasinos.com: KY detail Jul 2026", url:"https://sweepcasinos.com/legal/"},
-      {type:"secondary", label:"vegasinsider.com: KY legal status", url:"https://www.vegasinsider.com/sweepstakes-casinos/legal-states/"},
+      {type:"ag_opinion", label:"KY AG complaint v. VGW (filed Jun 17 2026)", url:"https://ag.ky.gov/Press%20Release%20Attachments/2026.06.17%20As%20Filed%20KYOAG%20v.%20VGW%20Complaint%20-%20Final.pdf"},
+      {type:"secondary", label:"WVXU: KY AG sues prediction markets, online sweepstakes", url:"https://www.wvxu.org/2026-06-17/kentucky-attorney-general-sues-prediction-markets-online-sweepstakes"},
+      {type:"secondary", label:"sweepcasinos.com: KY detail", url:"https://sweepcasinos.com/legal/"},
     ],
-    confidence:7.0,
+    confidence:8.0,
   },
+
 
   MS: {
     status:"gray", label:"Gray zone", icon:"⚠️",
@@ -404,16 +408,31 @@ const STATE_DATA = {
   // ── LEGAL STATES ─────────────────────────────────────────────────────────
 
   FL: {
-    status:"legal", label:"Legal", icon:"✅",
-    desc:"Florida is legal under the promotional sweepstakes model. Multiple bills to ban sweepstakes casinos died in the 2026 legislative session. The state saw increased lobbying from established gaming operators but legislators did not advance restrictions. Considered the highest-risk green-zone state for future legislative action.",
-    law:"FL Statute §849.094 (sweepstakes law) — 2026 ban bills failed in session",
-    risk:"green", riskLabel:"Legal — highest green-zone legislative risk — monitor 2027 session",
-    lastVerified:"2026-09-15",
+    status:"gray", label:"Gray zone (AG lawsuit)", icon:"⚠️",
+    desc:"Florida has no sweepstakes-casino ban statute; 2026 ban bills died in session. However, on August 19 2026 Attorney General James Uthmeier sued VGW (Chumba, LuckyLand, Global Poker), Stake (Stake.us) and several payment processors, alleging the dual-currency model is illegal gambling and violates FDUTPA, and seeking injunctions, restitution, disgorgement and penalties. The allegations are unproven and the operators dispute them. Some platforms still serve Florida, but exits or court orders could come with little notice. Highest-risk state still open to play.",
+    law:"FL Stat. §849.094 — no ban statute; FL AG v. VGW and v. Stake filed Aug 19 2026 (gambling law + FDUTPA)",
+    risk:"amber", riskLabel:"Active AG lawsuits — still available on some platforms — could change quickly",
+    lastVerified:"2026-11-11",
     sources:[
+      {type:"secondary", label:"Sweepsy: Florida AG sues VGW and Stake (Aug 19 2026)", url:"https://www.sweepsy.com/news/florida-attorney-general-sues-vgw-stake/"},
+      {type:"secondary", label:"Legal Sports Report: Florida AG sues Stake, VGW", url:"https://www.legalsportsreport.com/273506/florida-ag-sues-stake-vgw-over-illegal-gambling/"},
       {type:"statute", label:"FL Statute §849.094", url:"https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0800-0899/0849/Sections/0849.094.html"},
-      {type:"secondary", label:"sweepskings.com state guide", url:"https://sweepskings.com/sweepstakes-casinos/legal/"},
     ],
     confidence:8.0,
+  },
+
+
+  AR: {
+    status:"gray", label:"Gray zone (AG lawsuit)", icon:"⚠️",
+    desc:"Arkansas has no sweepstakes-casino ban statute. On November 4 2026 Attorney General Tim Griffin sued VGW (Chumba Casino, Global Poker, LuckyLand Casino, LuckyLand Slots) in White County Circuit Court, alleging the dual-currency model is illegal gambling and violates the Arkansas Deceptive Trade Practices Act, and seeking injunctions, restitution, refunds and penalties. VGW says it rejects the allegations. The suit is days old and unproven; it is not known whether VGW or other operators will restrict Arkansas.",
+    law:"No ban statute — AR AG v. VGW filed Nov 4 2026, White County Circuit Court (gambling law + ADTPA)",
+    risk:"amber", riskLabel:"New AG lawsuit (Nov 4 2026) — availability may change quickly",
+    lastVerified:"2026-11-11",
+    sources:[
+      {type:"secondary", label:"Covers: Arkansas targets Kalshi, VGW (Nov 5 2026)", url:"https://www.covers.com/industry/arkansas-targets-kalshi-vgw-separate-gambling-lawsuits-nov-5-2026"},
+      {type:"secondary", label:"Lines: Arkansas sues VGW, Kalshi", url:"https://www.thelines.com/legal-betting/arkansas-sues-vgw-kalshi-over-illegal-gambling/"},
+    ],
+    confidence:7.0,
   },
 
   TX: {
@@ -469,7 +488,7 @@ const STATE_DATA = {
     desc:"Virginia permits sweepstakes casino operations. A 2026 ban bill was introduced but failed during the legislative session. The state is also considering iGaming legalization (H 4431 pairs sweepstakes ban with iGaming) — monitor future sessions.",
     law:"Ban bill failed 2026 session — H 4431 iGaming/ban bill pending",
     risk:"green", riskLabel:"Legal — failed ban bill — monitor iGaming legislation that may include restrictions",
-    lastVerified:"2026-09-15",
+    lastVerified:"2026-11-11",
     sources:[
       {type:"secondary", label:"sweepsy.com: VA legislative tracker", url:"https://www.sweepsy.com/us/"},
     ],
@@ -518,8 +537,8 @@ const STATE_DATA = {
 // Default for states with no explicit entry
 const DEFAULT_STATE = {
   status:"legal", label:"Legal", icon:"✅",
-  desc:"No confirmed legislative ban, regulatory action, or AG enforcement identified for this state as of August 8 2026. Sweepstakes casinos operate under the federal promotional sweepstakes model. Always verify with individual operator Terms of Service before playing.",
-  law:"No restricting statute confirmed as of August 8 2026",
+  desc:"No confirmed legislative ban, regulatory action, or AG enforcement identified for this state as of November 11 2026. Sweepstakes casinos operate under the federal promotional sweepstakes model. Always verify with individual operator Terms of Service before playing.",
+  law:"No restricting statute confirmed as of November 11 2026",
   risk:"green", riskLabel:"No confirmed restriction — standard availability — verify operator ToS",
   lastVerified:"2026-09-15",
   sources:[{type:"secondary", label:"No primary restriction sources found — default status", url:""}],
@@ -558,7 +577,7 @@ const PLATFORMS = [
     tosVersion:"v22.0 (Dec 30 2025)",
     lastVerified:"2026-09-15",
     conf:9.0,
-    notes:"Restricted states per official rules v23.0: CA, CT, DE, ID, LA, MI, MS, MT, NV, NJ, NY, TN, WA, WV (updated with OK enacted ban Nov 2026). Age 21+. Min. redemption 100 SC ($100). SC expire 60 days after last login. FL single-play prize cap $5,000. Daily redemption cap $10,000. VGW leadership note: founder/CEO Laurence Escalante resigned as CEO and Executive Chairman on July 3, 2026, amid reported personal legal issues; Mats Johnson (previously Acting CEO since February 2026) has taken over leadership. This is a corporate-governance detail only — it has not been reported to affect operations, rules, or restricted-state lists on this platform.",
+    notes:"LITIGATION (as alleged, unproven): VGW is a defendant in AG suits in Kentucky (filed Jun 17 2026), Florida (Aug 19 2026) and Arkansas (Nov 4 2026); VGW says it rejects the claims. NY AG $8M settlement announced Sept 9 2026. Restricted states per official rules v23.0: CA, CT, DE, ID, LA, MI, MS, MT, NV, NJ, NY, TN, WA, WV (updated with OK enacted ban Nov 2026). Age 21+. Min. redemption 100 SC ($100). SC expire 60 days after last login. FL single-play prize cap $5,000. Daily redemption cap $10,000. VGW leadership note: founder/CEO Laurence Escalante resigned as CEO and Executive Chairman on July 3, 2026, amid reported personal legal issues; Mats Johnson (previously Acting CEO since February 2026) has taken over leadership. This is a corporate-governance detail only — it has not been reported to affect operations, rules, or restricted-state lists on this platform.",
     risk:"VGW targeted by enforcement in multiple states (LA Dept. of Revenue $44M suit, MD MLGCA C&D Dec 2025). Online entry process collects biometric selfie data per VGW Privacy Policy.",
     sources:[
       {type:"operator_tos", label:"Chumba Sweeps Rules v23.0 (official PDF)", url:"https://media.www.chumbacasino.com/vgwholdings89e8-vgw-prod-817c/media/260318_POL_CHU_Sweeps_Rules_23-0.pdf"},
@@ -592,7 +611,7 @@ const PLATFORMS = [
     tosVersion:"N/A — platform closed",
     lastVerified:"2026-09-15",
     conf:8.5,
-    notes:"VGW confirmed permanent closure of LuckyLand Slots on July 28, 2026, ending an 8-year run, as VGW consolidates around its newer LuckyLand Casino brand (launched Dec 2025). Closure completed on schedule September 14, 2026. Did not affect Chumba Casino, LuckyLand Casino, or Global Poker. This entry is kept (rather than deleted) for historical reference and so anyone searching for 'LuckyLand Slots' finds an accurate closure notice instead of stale sign-up information. Confidence is not 9-10 because, as of this audit, no post-closure-date source has yet been checked confirming the shutdown executed exactly as announced — the assessment relies on the pre-closure announcement schedule, which was independently confirmed by 7+ outlets.",
+    notes:"LITIGATION (as alleged, unproven): named in AG suits in Kentucky, Florida and Arkansas against VGW. VGW confirmed permanent closure of LuckyLand Slots on July 28, 2026, ending an 8-year run, as VGW consolidates around its newer LuckyLand Casino brand (launched Dec 2025). Closure completed on schedule September 14, 2026. Did not affect Chumba Casino, LuckyLand Casino, or Global Poker. This entry is kept (rather than deleted) for historical reference and so anyone searching for 'LuckyLand Slots' finds an accurate closure notice instead of stale sign-up information. Confidence is not 9-10 because, as of this audit, no post-closure-date source has yet been checked confirming the shutdown executed exactly as announced — the assessment relies on the pre-closure announcement schedule, which was independently confirmed by 7+ outlets.",
     risk:"This platform no longer exists as of September 14, 2026. If you see any site claiming to be 'LuckyLand Slots' still operating and accepting sign-ups or purchases after this date, treat it as a scam or phishing attempt impersonating the defunct brand — it is not VGW.",
     sources:[
       {type:"secondary", label:"Casino.org: LuckyLand Slots winding down amid VGW turmoil", url:"https://www.casino.org/news/luckyland-slots-winding-down-amid-vgw-turmoil-sweepstakes-pushback/"},
@@ -613,15 +632,15 @@ const PLATFORMS = [
     restricted:["CA","CT","MT","NJ","NY","IN","ME","ID","MI","WA","TN","LA","OK","NV","WV","MD","MS","DE","UT"],
     gcOnly:["WV","LA","MD","MS"],
     loginGated:false,
-    mailIn:true, mailSC:"5 SC per request", onlineEntry:false,
-    entryMethod:"mail",
-    mailDetail:"MAIL-IN (physical post required). LuckyLand Casino is a separate, newer VGW platform (launched December 2025) and uses a traditional mail-in AMOE — unlike sister brands Chumba, Global Poker, and the now-closing LuckyLand Slots, which use VGW's online photo-submission system. Use non-black ink. Handwrite your full name, mailing address, email, and required request statement on a plain card, following the exact format in the current Sweeps Rules linked from luckylandcasino.com/legal/terms. Include your unique request code from your LuckyLand Casino account. Mail in a stamped envelope to the address in the official sweepstakes rules. Each valid request = 5 SC. NOTE: entry method could not be confirmed against a primary-source Sweeps Rules PDF (only linked from the ToS page, not independently fetched) — confirmed instead via multiple independent secondary sources. Verify current process in your account before mailing.",
+    mailIn:false, mailSC:"5 SC per online request", onlineEntry:true,
+    entryMethod:"online",
+    mailDetail:"ONLINE SUBMISSION — no postal mail required. LuckyLand Casino uses VGW's in-account online 'Entry Request' system — the same mechanism as sister brands Chumba Casino and Global Poker — not a mail-in process. Under your account settings, select 'Entry Request' to see the current submission steps (this typically follows the VGW group pattern: complete an Entry Acknowledgment Form, pass a CAPTCHA check, and submit a photo of a handwritten card per the on-screen template). Each valid request = 5 SC. CORRECTION (Sept 2026): this entry was previously listed as mail-in based on generic AMOE language from lower-quality affiliate sources; a more detailed, dated review (sweepskings.com, Aug 6 2026) explicitly describes the in-account 'Entry Request' flow, consistent with VGW's standard online system. The exact step-by-step wording has not been independently confirmed against a primary Sweeps Rules document — verify the precise steps in your own account before relying on this.",
     methods:[
       "Sign-up bonus: GC + SC (reported amounts vary by source — 7,777 GC + 10 SC, 100,000 GC + 2.5 SC, and 777,777 GC + 2 SC have each been reported; verify current offer at luckylandcasino.com)",
-      "Purchase bonus: 125,000 GC + 50 SC for $24.99 (reported 'best value' package)",
+      "First purchase bonus: 3,500,000 GC + 10 SC for $4.99 (reported new-member-only offer, sweepskings.com Aug 2026)",
       "Daily login streaks and automatic VIP enrollment",
       "Hourly tournaments — up to 40,000,000 GC prize pools, ~200-player fields",
-      "Mail-in AMOE: 5 SC per request",
+      "Online Entry Request (in-account): 5 SC per valid submission",
       "Social media giveaways",
     ],
     rulesUrl:"https://luckylandcasino.com/legal/terms",
@@ -629,14 +648,14 @@ const PLATFORMS = [
     rulesVersion:"Sweeps Rules linked from ToS page (specific version not independently confirmed)",
     tosVersion:"Current as of ~Jul 2026 per available cache",
     lastVerified:"2026-09-15",
-    conf:6.0,
-    notes:"NEW PLATFORM — launched December 2025 as VGW's fourth active sweepstakes brand, positioned to eventually carry the LuckyLand name forward as sister brand LuckyLand Slots closes permanently on September 14, 2026. Despite the similar name, this is a legally and technically separate platform with its own Terms of Service, operated by Beells Limited (payments) with sweepstakes promotions run by VGW Games Limited under the same Malta Gaming Authority license VGW uses for Chumba and Global Poker. Emphasizes social live-dealer and table games (blackjack, baccarat, roulette) alongside slots — a broader library than the slots-only LuckyLand Slots. Balances on LuckyLand Slots do NOT transfer to this platform. Restricted-state list reconstructed from a January 2026 secondary source (14 states) plus states with statutory bans enacted since then (IN, ME, OK, UT) and VGW's group-wide MD/enforcement posture — not independently confirmed against a live, dated Sweeps Rules document.",
-    risk:"This is a young platform (8 months old as of this audit) without the multi-year compliance track record of Chumba or Global Poker, launched specifically while VGW faced mounting regulatory and legal pressure across multiple states, including the March 2026 resignation of VGW founder Laurence Escalante amid personal legal issues. Confidence score is lower than other VGW platforms because the sweepstakes rules URL and current restricted-state list could not be verified against a primary document — treat the restricted-state list as directional and verify directly on luckylandcasino.com before playing.",
+    conf:6.5,
+    notes:"LITIGATION (as alleged, unproven): named in AG suits in Kentucky, Florida and Arkansas against VGW. NEW PLATFORM — launched December 2025 as VGW's fourth active sweepstakes brand, positioned to eventually carry the LuckyLand name forward as sister brand LuckyLand Slots closed permanently on September 14, 2026. Despite the similar name, this is a legally and technically separate platform with its own Terms of Service, operated by Beells Limited (payments) with sweepstakes promotions run by VGW Games Limited under the same Malta Gaming Authority license VGW uses for Chumba and Global Poker. Emphasizes social live-dealer and table games (blackjack, baccarat, roulette) alongside slots — a broader library than the discontinued slots-only LuckyLand Slots. Restricted-state list reconstructed from a January 2026 secondary source (14 states) plus states with statutory bans enacted since then (IN, ME, OK, UT) and VGW's group-wide MD/enforcement posture — not independently confirmed against a live, dated Sweeps Rules document.",
+    risk:"This is a young platform (9 months old as of this audit) without the multi-year compliance track record of Chumba or Global Poker, launched specifically while VGW faced mounting regulatory and legal pressure across multiple states, including the July 2026 resignation of VGW founder Laurence Escalante amid personal legal issues. Confidence score is lower than other VGW platforms because the sweepstakes rules URL and current restricted-state list could not be verified against a primary document — treat the restricted-state list as directional and verify directly on luckylandcasino.com before playing.",
     sources:[
       {type:"operator_tos", label:"LuckyLand Casino Terms and Conditions (official)", url:"https://luckylandcasino.com/legal/terms"},
+      {type:"secondary", label:"SweepsKings review (Aug 6 2026) — confirms in-account Entry Request flow", url:"https://sweepskings.com/reviews/luckyland-casino/"},
       {type:"secondary", label:"Casino.org / Deadspin: VGW launches LuckyLand Casino", url:"https://deadspin.com/legal-betting/vgw-launches-luckyland-casino-amid-regulatory-pressure/"},
       {type:"secondary", label:"Sweepsy: VGW launches LuckyLand Casino, fourth sweeps site", url:"https://www.sweepsy.com/news/vgw-launches-luckyland-casino-fourth-sweeps-site-now-live/"},
-      {type:"secondary", label:"Sweepsy review: LuckyLand Casino restricted states (Jan 2026)", url:"https://www.sweepsy.com/reviews/luckyland-casino/"},
     ],
   },
 
@@ -667,7 +686,7 @@ const PLATFORMS = [
     tosVersion:"v22.0 (Nov 11 2025) — confirmed working PDF",
     lastVerified:"2026-09-15",
     conf:7.5,
-    notes:"Only tracked sweepstakes platform offering poker format (Texas Hold'em, Omaha ring games + MTTs). VGW Holdings raises minimum age to 21 in Feb 2025 (previously 18). Same restricted state list as Chumba. Exited CA Jan 1 2026. Browser-only — no download client.",
+    notes:"LITIGATION (as alleged, unproven): named in AG suits in Kentucky, Florida and Arkansas against VGW. Only tracked sweepstakes platform offering poker format (Texas Hold'em, Omaha ring games + MTTs). VGW Holdings raises minimum age to 21 in Feb 2025 (previously 18). Same restricted state list as Chumba. Exited CA Jan 1 2026. Browser-only — no download client.",
     risk:"VGW enforcement exposure. Poker format may attract additional regulatory scrutiny compared to slots-only platforms.",
     sources:[
       {type:"operator_tos", label:"Global Poker T&Cs v22.0 (Nov 2025 PDF)", url:"https://globalpoker.com/documents/251111-POL-POK-T%26Cs-22-0.pdf"},
@@ -1027,7 +1046,7 @@ const PLATFORMS = [
     tosVersion:"Current (rules and ToS combined in one document)",
     lastVerified:"2026-09-15",
     conf:7.5,
-    notes:"Stake.us rules and ToS are combined in one document at stake.us/policies/terms. Very broad restricted list — includes AZ, UT, VT, RI, PA, MS in addition to statutory bans. 1,400+ games. Crypto supported for purchases and redemptions (BTC, ETH, LTC, DOGE, BCH, XRP). Partnerships with Drake, Stake F1 team, UFC, Everton FC.",
+    notes:"LITIGATION (as alleged, unproven): Florida AG sued Stake (Stake.us) on Aug 19 2026. Stake.us ended Oklahoma access Oct 30 2026. Stake.us rules and ToS are combined in one document at stake.us/policies/terms. Very broad restricted list — includes AZ, UT, VT, RI, PA, MS in addition to statutory bans. 1,400+ games. Crypto supported for purchases and redemptions (BTC, ETH, LTC, DOGE, BCH, XRP). Partnerships with Drake, Stake F1 team, UFC, Everton FC.",
     risk:"Offshore operator (Medium Rare N.V.) — social version of Stake.com offshore crypto casino. LA City Attorney enforcement action in CA. Broadest restricted state list of all major tracked platforms. Section 8.3 mail-in address in ToS must be checked before each mailing.",
     sources:[
       {type:"operator_tos", label:"Stake.us Policies/Terms (Section 8.3 for AMOE)", url:"https://stake.us/policies/terms"},
@@ -1327,6 +1346,27 @@ const CHANGE_HISTORY = [
       {entity:"platform", id:"luckyland", field:"status", prev:"CLOSING PERMANENTLY Sept 14, 2026 (pre-closure)", next:"CLOSED PERMANENTLY as of Sept 14, 2026 — closure completed on the announced schedule; entry retained for historical/scam-warning purposes", source:"https://www.gambling.com/us/news/vgw-to-shut-down-luckyland-slots-on-september-14"},
       {entity:"platform", id:"chumba", field:"notes", prev:"no leadership note", next:"added note: VGW founder/CEO Laurence Escalante resigned July 3, 2026; Mats Johnson now CEO — governance detail only, no reported operational impact", source:"https://igaming.org/casino-news/vgw-will-close-luckyland-slots-on-september-14/"},
       {entity:"meta", id:"all_entries", field:"lastVerified", prev:"2026-08-08 (57 entries)", next:"2026-09-15 — re-verified via targeted search, no other material changes found"},
+    ],
+  },
+  {
+    timestamp:"2026-09-15T00:00:00Z",
+    type:"user_reported_correction",
+    description:"User reported LuckyLand Casino entry method was wrong (listed as mail-in, is actually online entry). Verified before applying: found a more detailed, dated review (sweepskings.com, Aug 6 2026) explicitly describing an in-account 'Entry Request' flow, consistent with VGW's standard online photo-submission system used by Chumba and Global Poker. The prior mail-in listing was based on generic 'AMOE' language from thinner affiliate sources that did not describe the actual mechanism.",
+    changedItems:[
+      {entity:"platform", id:"luckylandcasino", field:"onlineEntry/mailIn", prev:"mailIn:true, onlineEntry:false, mail-in AMOE 5 SC/request", next:"mailIn:false, onlineEntry:true, in-account online Entry Request 5 SC/request", source:"https://sweepskings.com/reviews/luckyland-casino/"},
+      {entity:"platform", id:"luckylandcasino", field:"conf", prev:"6.0", next:"6.5 — raised slightly due to a more detailed corroborating source, but still below primary-document confirmation"},
+    ],
+  },
+  {
+    timestamp:"2026-11-11T00:00:00Z",
+    type:"full_audit",
+    description:"Nov 11 2026 update: Oklahoma ban now in effect; added Florida and Arkansas AG lawsuits and the Kentucky AG lawsuit that earlier data omitted; fixed automation. Platform-level fields (restricted lists, entry methods) were NOT re-verified in this pass.",
+    changedItems:[
+      {entity:"state", id:"OK", field:"status", prev:"enacted, not yet effective; operators still serving", next:"ban in effect Nov 1 2026; ACE, Baba, Stake.us, Modo exits reported", source:"https://www.sweepsy.com/news/baba-ace-exit-oklahoma-nov-1-sweeps-ban/"},
+      {entity:"state", id:"FL", field:"status", prev:"legal (green)", next:"gray — FL AG sued VGW and Stake Aug 19 2026", source:"https://www.sweepsy.com/news/florida-attorney-general-sues-vgw-stake/"},
+      {entity:"state", id:"AR", field:"added", prev:"DEFAULT_STATE (legal)", next:"gray — AR AG sued VGW Nov 4 2026 (White County Circuit Court)", source:"https://www.covers.com/industry/arkansas-targets-kalshi-vgw-separate-gambling-lawsuits-nov-5-2026"},
+      {entity:"state", id:"KY", field:"desc", prev:"no AG action; VGW settled a lawsuit", next:"KY AG sued VGW Jun 17 2026 (earlier text was wrong)", source:"https://ag.ky.gov/Press%20Release%20Attachments/2026.06.17%20As%20Filed%20KYOAG%20v.%20VGW%20Complaint%20-%20Final.pdf"},
+      {entity:"meta", id:"SITE_META", field:"lastChecked", prev:"(field did not exist)", next:"added; separate from auditDate"},
     ],
   },
 ];

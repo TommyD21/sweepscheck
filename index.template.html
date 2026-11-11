@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<meta name="description" content="State-by-state legal eligibility checker for sweepstakes casinos. Verified legal status, mail-in instructions, and free coin methods for all 50 U.S. states. Audited August 2026.">
+<meta name="description" content="State-by-state legal eligibility checker for sweepstakes casinos. Verified legal status, mail-in instructions, and free coin methods for all 50 U.S. states. Last-verified date shown on the page.">
 <meta name="theme-color" content="#1c1c21">
 <meta property="og:title" content="SweepsCheck — Sweepstakes Casino Legal Lookup">
-<meta property="og:description" content="Find out if sweepstakes casinos are legal in your state. Audited August 8, 2026. Mail-in entry guides, platform availability, and official rules links.">
+<meta property="og:description" content="Find out if sweepstakes casinos are legal in your state. Legal data verified regularly with a visible last-verified date. Mail-in entry guides, platform availability, and official rules links.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sweepscheck.app/og-image.png">
 <link rel="canonical" href="https://sweepscheck.app/">
-<title>SweepsCheck — Sweepstakes Casino Legal Lookup by State (August 2026)</title>
+<title>SweepsCheck — Sweepstakes Casino Legal Lookup by State</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
@@ -225,7 +225,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 <header class="header">
   <div class="header-inner">
     <a href="/" class="logo" aria-label="SweepsCheck home">Sweeps<span>Check</span></a>
-    <div class="audit-badge" id="auditBadge" aria-label="Loading audit date">AUDITED —</div>
+    <div class="audit-badge" id="auditBadge" aria-label="Loading audit date">VERIFIED —</div>
   </div>
 </header>
 
@@ -293,7 +293,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
     </div>
     <div class="info-card">
       <h3><span aria-hidden="true">⚠️</span> Limitations and risks</h3>
-      <p>The sweepstakes casino legal landscape is changing rapidly. At least 14 states have enacted bans as of August 2026. New legislation can take effect with little warning. This tool reflects known law as of its last audit date. Always verify the operator's current Terms of Service and your state's law before registering or depositing. This is not a substitute for legal counsel.</p>
+      <p>The sweepstakes casino legal landscape is changing rapidly. Many states have enacted bans, and more are in litigation. New legislation can take effect with little warning. This tool reflects known law as of its last audit date. Always verify the operator's current Terms of Service and your state's law before registering or depositing. This is not a substitute for legal counsel.</p>
     </div>
     <div class="info-card">
       <h3><span aria-hidden="true">📬</span> Corrections</h3>
@@ -304,7 +304,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 </main>
 
 <footer class="footer">
-  <p>SweepsCheck · Evidence-based legal reference · Not legal advice · Audited <span class="footer-date"></span><br>
+  <p>SweepsCheck · Evidence-based legal reference · Not legal advice · Legal data last verified <span class="footer-date"></span><br><span id="lastCheckedLine"></span><br>
   Sources: official state statutes, operator Terms of Service, regulatory guidance<br>
   <a href="mailto:corrections@sweepscheck.app">Submit a correction</a></p>
 </footer>
@@ -360,8 +360,20 @@ document.querySelectorAll('#auditDateDisplay,.footer-date').forEach(el => {
 
 const auditBadgeEl = document.getElementById('auditBadge');
 if (auditBadgeEl) {
-  auditBadgeEl.textContent = `AUDITED ${formatDateShort(SITE_META.auditDate)}`;
-  auditBadgeEl.setAttribute('aria-label', `Data audited ${formatDate(SITE_META.auditDate)}`);
+  const checked = SITE_META.lastChecked
+    ? `Sources auto-checked ${formatDate(SITE_META.lastChecked)}`
+    : 'Automated source check not yet run';
+  auditBadgeEl.textContent = `VERIFIED ${formatDateShort(SITE_META.auditDate)}`;
+  auditBadgeEl.setAttribute('aria-label', `Legal data last verified ${formatDate(SITE_META.auditDate)}. ${checked}.`);
+  auditBadgeEl.title = checked;
+}
+
+// Footer line: separate "verified" (human/Claude reviewed law) from "checked" (bot reached sources)
+const checkedEl = document.getElementById('lastCheckedLine');
+if (checkedEl) {
+  checkedEl.textContent = SITE_META.lastChecked
+    ? `Automated source check: ${formatDate(SITE_META.lastChecked)} · next due ${formatDate(SITE_META.nextScheduled)}`
+    : `Automated source check: pending · next due ${formatDate(SITE_META.nextScheduled)}`;
 }
 
 // ── STATE SEARCH / AUTOCOMPLETE ────────────────────────────────────────────
@@ -657,7 +669,7 @@ function renderState(code) {
                 </div>
                 <div class="conf-num">${p.conf}/10</div>
               </div>
-              <div class="verified-line">Last verified: ${escHtml(p.lastVerified)} · Audit: Aug 8 2026 · Sources: ${escHtml((p.sources||[]).map(s=>s.type).join(', ')||'See links above')}</div>
+              <div class="verified-line">Last verified: ${escHtml(p.lastVerified)} · Audit: ${escHtml(formatDate(SITE_META.auditDate))} · Sources: ${escHtml((p.sources||[]).map(s=>s.type).join(', ')||'See links above')}</div>
             </div>
           </div>
         </div>`;
@@ -686,7 +698,7 @@ function renderState(code) {
     html += `<div style="font-size:10px;color:var(--text3);margin-top:18px;line-height:1.7;font-family:'DM Mono',monospace;border-top:1px solid var(--border);padding-top:10px">
       <strong style="color:var(--text3)">State legal status sources:</strong>
       ${st.sources.filter(s => s.url).map(s => `<a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--text3);text-decoration:underline;display:inline-block;margin-right:10px">${escHtml(s.label)}</a>`).join('')}
-      <br>Data audited Aug 8 2026 · Confidence: ${st.confidence}/10 · Not legal advice
+      <br>Data audited ${escHtml(formatDate(SITE_META.auditDate))} · Confidence: ${st.confidence}/10 · Not legal advice
     </div>`;
   }
 
