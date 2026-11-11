@@ -1,0 +1,159 @@
+name: Biweekly Legal Data Check
+
+on:
+  schedule:
+    # Every 14 days: 8 AM UTC on the 1st and 15th of each month
+    - cron: '0 8 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run without writing changes (dry run)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+# Only allow one checker to run at a time
+concurrency:
+  group: sweepscheck-biweekly
+  cancel-in-progress: false
+
+jobs:
+  legal-data-check:
+    name: Audit legal data freshness and monitor sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      contents: write          # push updated data.js timestamps + reports
+      issues: write            # open review-required issues
+      pull-requests: write     # open PRs for significant changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No third-party dependencies, so there is nothing to install.
+      # (Previously `npm ci` + npm cache failed because no lockfile exists.)
+
+      - name: Run integrity tests first
+        run: npm test
+        # Fail fast — do not run checker if data is structurally broken
+
+      - name: Run biweekly checker
+        id: checker
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            node checker.js --dry-run --verbose
+          else
+            node checker.js --verbose
+          fi
+        # Exit code 1 = review required (not a fatal error, continue to next steps)
+        continue-on-error: true
+
+      - name: Read check results
+        id: results
+        if: always()
+        run: |
+          REPORT=$(ls reports/check-*.json 2>/dev/null | sort | tail -1)
+          if [ -n "$REPORT" ]; then
+            STATUS=$(node -e "const r=require('./${REPORT}'); console.log(r.summary.overallStatus)")
+            REVIEW=$(node -e "const r=require('./${REPORT}'); console.log(r.summary.reviewRequiredCount)")
+            CHANGES=$(node -e "const r=require('./${REPORT}'); console.log(r.summary.contentChanges)")
+            ERRORS=$(node -e "const r=require('./${REPORT}'); console.log(r.summary.integrityErrors)")
+            echo "status=$STATUS" >> $GITHUB_OUTPUT
+            echo "review_count=$REVIEW" >> $GITHUB_OUTPUT
+            echo "content_changes=$CHANGES" >> $GITHUB_OUTPUT
+            echo "integrity_errors=$ERRORS" >> $GITHUB_OUTPUT
+            echo "report_file=$REPORT" >> $GITHUB_OUTPUT
+          else
+            echo "status=ERROR" >> $GITHUB_OUTPUT
+            echo "review_count=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit updated hashes and timestamps
+        # checker exits 1 when review is needed; that is normal, so commit anyway.
+        # Only skip on dry runs or if the job was cancelled.
+        if: ${{ !cancelled() && github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name  "SweepsCheck Bot"
+          git config user.email "bot@sweepscheck.app"
+          git add .content-hashes.json data.js
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "chore: biweekly check $(date +%Y-%m-%d) — ${{ steps.results.outputs.status }}"
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            git push
+          fi
+
+      - name: Open review-required issue
+        if: |
+          steps.results.outputs.status == 'REVIEW_REQUIRED' &&
+          steps.results.outputs.review_count > 0 &&
+          github.event.inputs.dry_run != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const reportFile = '${{ steps.results.outputs.report_file }}';
+            const fs = require('fs');
+            let body = '## SweepsCheck — Legal Data Review Required\n\n';
+            body += `**Run date:** ${new Date().toISOString().split('T')[0]}\n`;
+            body += `**Items requiring review:** ${{ steps.results.outputs.review_count }}\n`;
+            body += `**Content changes detected:** ${{ steps.results.outputs.content_changes }}\n\n`;
+            body += '### Action Required\n\n';
+            body += '1. Open the Actions run and download the `check-report` artifact (see check-*-summary.md)\n';
+            body += '2. Manually verify any flagged legal status changes against primary sources\n';
+            body += '3. Update `data.js` with verified changes and close this issue\n\n';
+            body += '> ⚠ **Do not merge automated data changes without human review of legal status fields.**\n\n';
+            body += '---\n';
+            body += '*Opened automatically by the biweekly checker. See the Actions run for full details.*\n';
+
+            // Check if a review issue is already open
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'legal-review-required',
+            });
+
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Legal data review required — ${new Date().toISOString().split('T')[0]}`,
+                body,
+                labels: ['legal-review-required', 'automated'],
+              });
+            } else {
+              // Comment on existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `### New check run: ${new Date().toISOString().split('T')[0]}\n\n` + body,
+              });
+            }
+
+      - name: Upload report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-report-${{ github.run_id }}
+          path: reports/
+          retention-days: 90
+
+      - name: Fail run if integrity errors
+        if: steps.results.outputs.integrity_errors > 0
+        run: |
+          echo "Data integrity errors detected — manual fix required before next deployment"
+          exit 1
