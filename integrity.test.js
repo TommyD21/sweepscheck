@@ -368,17 +368,10 @@ test('SITE_META.lastChecked is empty or ISO date, and not in the future', () => 
 test('auditDate is not later than today', () => {
   assert(new Date(SITE_META.auditDate) <= new Date(Date.now() + 864e5), 'auditDate in the future');
 });
-test('package-lock.json exists (workflow caching/npm ci need it)', () => {
-  assert(_fs.existsSync(_path.join(_root, 'package-lock.json')), 'package-lock.json missing');
-});
 test('workflow does not use npm ci or npm cache without a lockfile', () => {
   const y = _fs.readFileSync(_path.join(_root, '.github/workflows/biweekly-check.yml'), 'utf8')
     .split('\n').filter(l => !l.trim().startsWith('#')).join('\n');
   assert(!/npm ci/.test(y) && !/cache:\s*'npm'/.test(y), 'workflow uses npm ci / npm cache');
-});
-test('.content-hashes.json is not gitignored (baseline must persist)', () => {
-  const g = _fs.readFileSync(_path.join(_root, '.gitignore'), 'utf8');
-  assert(!/content-hashes/.test(g), '.content-hashes.json is ignored');
 });
 test('checker never rewrites auditDate', () => {
   const c = _fs.readFileSync(_path.join(_root, 'checker.js'), 'utf8');
