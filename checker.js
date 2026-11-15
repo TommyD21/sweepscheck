@@ -55,7 +55,7 @@ const MONITORED_SOURCES = [
   { id: "mcluck-home",       url: "https://www.mcluck.com/",                        label: "McLuck homepage (version signals)" },
   { id: "pulsz-rules",       url: "https://www.pulsz.com/sweepstakes-rules",        label: "Pulsz sweeps rules page" },
   { id: "stake-terms",       url: "https://stake.us/policies/terms",                label: "Stake.us ToS (Section 8.3 AMOE)" },
-  { id: "megabonanza-rules", url: "https://www.megabonanza.com/sweepstakes-rules",  label: "MegaBonanza sweeps rules" },
+  { id: "megabonanza-terms", url: "https://www.megabonanza.com/terms-of-service",  label: "MegaBonanza terms of service" },
   { id: "rolla-rules",       url: "https://www.rolla.com/sweepstakes-rules",        label: "Rolla sweeps rules" },
   { id: "wowvegas-rules",    url: "https://www.wowvegas.com/sweepstakes-rules",     label: "WOW Vegas sweeps rules" },
 ];
@@ -196,6 +196,7 @@ async function run() {
     banSignals: [],
     missingData: [],
     urlErrors: [],
+    blockedSources: [],
     summary: {},
     changeLogEntries: [],
   };
@@ -224,6 +225,7 @@ async function run() {
 
   console.log('▶ Checking staleness of platform records…');
   for (const p of PLATFORMS) {
+    if (p.closed) continue; // permanently closed platforms are not re-verified
     const s = stalenessLevel(p.lastVerified);
     if (s.level !== 'current') {
       report.stalenessAlerts.push({
@@ -256,6 +258,11 @@ async function run() {
     if (!result.ok) {
       console.log(`FETCH FAILED (${result.error})`);
       report.urlErrors.push({ sourceId: source.id, url: source.url, error: result.error });
+      continue;
+    }
+    if (result.status === 403 || result.status === 429) {
+      console.log(`BLOCKED (HTTP ${result.status} — site refuses automated requests; not a dead link)`);
+      report.blockedSources.push({ sourceId: source.id, url: source.url, status: result.status });
       continue;
     }
     if (result.status >= 400) {
@@ -325,6 +332,7 @@ async function run() {
     stalenessAlerts:    report.stalenessAlerts.length,
     contentChanges:     report.contentChanges.length,
     urlErrors:          report.urlErrors.length,
+    blockedSources:     report.blockedSources.length,
     sourcesChecked:     sourcesOk,
     sourcesTotal:       MONITORED_SOURCES.length,
     banSignals:         report.banSignals.length,
@@ -455,7 +463,7 @@ function runIntegrityChecks(data) {
       }
     }
     // AMOE consistency
-    if (p.mailIn === false && p.onlineEntry === false && p.mailSC !== 'Discontinued') {
+    if (!p.closed && p.mailIn === false && p.onlineEntry === false && !/^Discontinued/i.test(p.mailSC || '') && p.entryMethod !== 'none') {
       // Platform offers no free entry method — flag for awareness
       findings.push({ severity: 'warn', message: `Platform ${p.id} has mailIn=false, onlineEntry=false but mailSC is not 'Discontinued' — verify` });
     }
@@ -479,7 +487,9 @@ function generateMarkdownSummary(report, reviewItems) {
     `| Platforms tracked | ${report.summary.totalPlatforms} |`,
     `| Staleness alerts | ${report.summary.stalenessAlerts} |`,
     `| Content changes detected | ${report.summary.contentChanges} |`,
-    `| URL fetch errors | ${report.summary.urlErrors} |`,
+    `| URL fetch errors (dead links) | ${report.summary.urlErrors} |`,
+    `| Sources that blocked the bot (403/429) | ${report.summary.blockedSources} |`,
+    `| Sources reached | ${report.summary.sourcesChecked} of ${report.summary.sourcesTotal} |`,
     `| Integrity errors | ${report.summary.integrityErrors} |`,
     `| Integrity warnings | ${report.summary.integrityWarnings} |`,
     `| **Items requiring review** | **${report.summary.reviewRequiredCount}** |`,
@@ -489,8 +499,16 @@ function generateMarkdownSummary(report, reviewItems) {
   if (reviewItems.length > 0) {
     lines.push(`## ⚠ Items Requiring Human Review`, ``);
     for (const item of reviewItems) {
-      lines.push(`- **${item.type || item.sourceId || item.id}**: ${item.message || item.stalenessLabel || ''}`);
+      const who = item.id ? `${item.type} ${item.id}${item.label ? ` (${item.label})` : ''}` : (item.sourceId || item.type || 'item');
+      const what = item.message || (item.stalenessLabel ? `${item.stalenessLabel}, last verified ${item.lastVerified}` : '');
+      lines.push(`- **${who}**: ${what}`);
     }
+    lines.push(``);
+  }
+
+  if (report.blockedSources && report.blockedSources.length > 0) {
+    lines.push(`## Sources That Blocked the Bot`, ``, `These refuse automated requests, so they cannot be auto-monitored. Check them by hand now and then.`, ``);
+    for (const b of report.blockedSources) lines.push(`- **${b.sourceId}**: ${b.url} — HTTP ${b.status}`);
     lines.push(``);
   }
 
