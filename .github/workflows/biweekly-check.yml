@@ -45,6 +45,9 @@ jobs:
       # No third-party dependencies, so there is nothing to install.
       # (Previously `npm ci` + npm cache failed because no lockfile exists.)
 
+      - name: Prepare reports folder
+        run: mkdir -p reports
+
       - name: Run integrity tests first
         run: npm test
         # Fail fast — do not run checker if data is structurally broken
@@ -87,7 +90,9 @@ jobs:
         run: |
           git config user.name  "SweepsCheck Bot"
           git config user.email "bot@sweepscheck.app"
-          git add .content-hashes.json data.js
+          git add data.js
+          # -f: works even if an old .gitignore still lists the hashes file
+          [ -f .content-hashes.json ] && git add -f .content-hashes.json || true
           if git diff --cached --quiet; then
             echo "Nothing to commit"
           else
@@ -150,6 +155,7 @@ jobs:
         with:
           name: check-report-${{ github.run_id }}
           path: reports/
+          if-no-files-found: ignore
           retention-days: 90
 
       - name: Fail run if integrity errors
