@@ -23,9 +23,9 @@
 
 const SITE_META = {
   auditDate:       "2026-11-11",   // Last HUMAN/Claude verification of legal data (checker never edits this)
-  lastChecked:     "",             // Set ONLY by the automated checker after it reaches its sources; empty = never run
+  lastChecked:     "2026-11-15",             // Set ONLY by the automated checker after it reaches its sources; empty = never run
   previousAudit:   "2026-09-15",   // Prior audit date, kept for reference
-  nextScheduled:   "2026-11-15",   // Next automated check due
+  nextScheduled:   "2026-12-01",   // Next automated check due
   dataVersion:     "3.1.0",
   auditCutoff:     "November 11, 2026",
   disclaimer:      "This is a reference directory, not legal advice. Sweepstakes casino law changes rapidly. Always verify current status with the operator's official Terms of Service before playing.",
