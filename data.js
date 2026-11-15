@@ -752,7 +752,7 @@ const PLATFORMS = [
       "Daily slot tournaments (leaderboard prizes including free SC)",
       "Purchase bonus SC with GC packages",
     ],
-    rulesUrl:"https://www.megabonanza.com/sweepstakes-rules",
+    rulesUrl:"https://megabonanza.com/terms-of-service",
     tosUrl:"https://www.megabonanza.com/terms-of-service",
     rulesVersion:"Current — ToS updated Jan 26 2026 (confirmed)",
     tosVersion:"Updated Jan 26 2026",
