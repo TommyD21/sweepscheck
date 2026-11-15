@@ -305,9 +305,9 @@ test('Pulsz has mailSC=Discontinued', () => {
   assert(pulsz.mailSC === 'Discontinued May 4 2026' || pulsz.mailSC.includes('Discontinued'), `Pulsz mailSC should be Discontinued, got: ${pulsz.mailSC}`);
 });
 
-test('Chumba rules URL is the verified PDF', () => {
+test('Chumba rules URL is the stable /sweeps-rules link (redirects to current PDF)', () => {
   const c = PLATFORMS.find(p => p.id === 'chumba');
-  assert(c && c.rulesUrl.includes('260318_POL_CHU_Sweeps_Rules_23-0.pdf'), 'Chumba must use verified PDF URL');
+  assert(c && /chumbacasino\.com\/sweeps-rules\/?$/.test(c.rulesUrl), 'Chumba must use the stable /sweeps-rules URL, not a dated PDF');
 });
 
 test('All platforms with type=Sweepstakes (not Social)', () => {
