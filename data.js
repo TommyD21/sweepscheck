@@ -23,7 +23,7 @@
 
 const SITE_META = {
   auditDate:       "2026-11-15",   // Last HUMAN/Claude verification of legal data (checker never edits this)
-  lastChecked:     "2026-11-15",   // Set ONLY by the automated checker after it reaches its sources; empty = never run
+  lastChecked:     "2026-11-16",   // Set ONLY by the automated checker after it reaches its sources; empty = never run
   previousAudit:   "2026-11-11",   // Prior audit date, kept for reference
   nextScheduled:   "2026-12-01",   // Next automated check due
   dataVersion:     "3.3.0",
